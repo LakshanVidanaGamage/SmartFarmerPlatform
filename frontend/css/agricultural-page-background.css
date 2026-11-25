@@ -1,0 +1,112 @@
+body.sf-home,
+body.sf-public-page,
+body.sf-farmer-dashboard,
+body.sf-buyer-dashboard,
+body.admin-page {
+    background-color: var(--sf-page, var(--fd-page, var(--bd-page, var(--bg, #f4f8f2))));
+    background-image: url("../images/smart-farmer-green-landscape-final.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+/* Keep the supplied landscape visible while giving dark pages a readable canvas. */
+[data-theme="dark"] body:is(.sf-home, .sf-public-page, .sf-farmer-dashboard, .sf-buyer-dashboard, .admin-page) {
+    background-color: #263d2d;
+    background-image: url("../images/smart-farmer-green-landscape-final.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+}
+
+/* Public calls to action use a light green in dark mode, so they need dark ink. */
+[data-theme="dark"] :is(.sf-home, .sf-public-page) :is(.sf-btn-primary, .sf-btn-small),
+[data-theme="dark"] .sf-home .sf-home-cta,
+[data-theme="dark"] .sf-home .sf-prices-section .sf-market-price-toggle.sf-home-cta,
+[data-theme="dark"] .sf-home .sf-produce-section .sf-section-heading > .sf-text-link,
+[data-theme="dark"] .sf-home .sf-produce-section .sf-farmer-link:hover,
+[data-theme="dark"] :is(.sf-home, .sf-public-produce-page) .sf-fresh-produce-grid .sf-farmer-link:hover,
+[data-theme="dark"] .sf-directory-page .sf-directory-card .sf-card-action,
+[data-theme="dark"] .sf-public-market-prices .sf-public-price-submit {
+    color: #14251b !important;
+}
+
+[data-theme="dark"] .sf-directory-page .sf-directory-card .sf-card-action:hover,
+[data-theme="dark"] .sf-home .sf-home-cta:hover,
+[data-theme="dark"] .sf-home .sf-produce-section .sf-section-heading > .sf-text-link:hover {
+    color: #14251b !important;
+}
+
+[data-theme="dark"] .sf-public-market-prices .sf-public-price-search button:hover,
+[data-theme="dark"] .sf-public-market-prices .sf-public-price-pagination button:hover:not(:disabled),
+[data-theme="dark"] .sf-public-market-prices .sf-public-price-pagination button[aria-current="page"],
+[data-theme="dark"] .sf-directory-page .sf-directory-pagination button:hover:not(:disabled),
+[data-theme="dark"] .sf-directory-page .sf-directory-pagination button[aria-current="page"],
+[data-theme="dark"] .sf-public-produce-page .sf-produce-category-button.is-active {
+    color: #14251b;
+}
+
+[data-theme="dark"] :is(.sf-home, .sf-public-page) .sf-availability {
+    color: var(--sf-green-deep);
+}
+
+/* Dashboard filters, search controls and table actions share the same light green. */
+[data-theme="dark"] .sf-farmer-dashboard .sf-produce-category-button.is-active,
+[data-theme="dark"] .sf-buyer-dashboard .sf-produce-category-button.is-active,
+[data-theme="dark"] .fd-search-control button:hover:not(:disabled),
+[data-theme="dark"] .bd-search-clear:hover,
+[data-theme="dark"] .sf-listing-action:hover,
+[data-theme="dark"] .sf-listing-pagination button:hover:not(:disabled),
+[data-theme="dark"] .sf-listing-pagination button.is-current {
+    color: #14251b;
+}
+
+[data-theme="dark"] .sf-listing-feedback.is-error {
+    color: #ffb9ae;
+}
+
+body.sf-public-page .sf-directory-hero {
+    background:
+        radial-gradient(ellipse at 8% 0%, rgba(196, 221, 166, .3), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, .2), transparent 100%);
+}
+
+[data-theme="dark"] body.sf-public-page .sf-directory-hero {
+    background:
+        radial-gradient(ellipse at 8% 0%, rgba(102, 146, 91, .16), transparent 42%),
+        linear-gradient(180deg, rgba(10, 24, 16, .18), transparent 100%);
+}
+
+@media (max-width: 760px) {
+    body.sf-home,
+    body.sf-public-page,
+    body.sf-farmer-dashboard,
+    body.sf-buyer-dashboard,
+    body.admin-page {
+        background-position: center top;
+        background-size: cover;
+        background-attachment: scroll;
+    }
+
+    [data-theme="dark"] body:is(.sf-home, .sf-public-page, .sf-farmer-dashboard, .sf-buyer-dashboard, .admin-page) {
+        background-position: center top;
+        background-attachment: scroll;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.sf-home,
+    body.sf-public-page,
+    body.sf-farmer-dashboard,
+    body.sf-buyer-dashboard,
+    body.admin-page {
+        background-attachment: scroll;
+    }
+
+    [data-theme="dark"] body:is(.sf-home, .sf-public-page, .sf-farmer-dashboard, .sf-buyer-dashboard, .admin-page) {
+        background-attachment: scroll;
+    }
+}

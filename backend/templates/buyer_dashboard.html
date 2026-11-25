@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="{{ session.get('language', 'en') }}">
+{% from "partials/back_button.html" import back_button %}
+{% from "partials/market_price_card.html" import market_price_card %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8f4">
+    <meta name="csrf-token" content="{{ session.get('auth_csrf_token', '')|e }}">
+    <title data-i18n="buyer.documentTitle">Buyer dashboard | Smart Farmer</title>
+    <script>
+        try {
+            const savedTheme = localStorage.getItem("sf-theme");
+            document.documentElement.setAttribute("data-theme", savedTheme === "dark" ? "dark" : "light");
+        } catch (error) {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buyer_dashboard.css') }}?v=dark-mode-1">
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/back-button.css') }}">
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/market-prices.css') }}?v=1">
+    {% if page_view in ['offers', 'orders'] %}<link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/offers-orders-table.css') }}">{% endif %}
+    {% if page_view|default('dashboard') == 'dashboard' %}<link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/overview-pagination.css') }}">{% endif %}
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/agricultural-page-background.css') }}?v=4">
+    <script src="{{ url_for('frontend_files', filename='js/i18n.js') }}?v=market-price-cards-1" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/main.js') }}" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/produce-images.js') }}?v=market-price-cards-1" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/market-price-pagination.js') }}?v=1" defer></script>
+    {% if page_view in ['offers', 'orders'] %}<script src="{{ url_for('frontend_files', filename='js/offers-orders-table.js') }}" defer></script>{% endif %}
+    {% if page_view|default('dashboard') == 'dashboard' %}<script src="{{ url_for('frontend_files', filename='js/overview-pagination.js') }}" defer></script>{% endif %}
+    <script src="{{ url_for('static', filename='js/buyer_dashboard.js') }}?v=buyer-produce-categories-20261115-3" defer></script>
+</head>
+<body class="sf-buyer-dashboard" data-page-view="{{ page_view|default('dashboard') }}">
+    <a class="bd-skip-link" href="#buyer-content" data-i18n="buyer.skip">Skip to dashboard content</a>
+    <div class="bd-shell">
+        <aside class="bd-sidebar" id="buyerSidebar">
+            <a class="bd-brand" href="{{ '#overview' if page_view|default('dashboard') == 'dashboard' else url_for('buyer_dashboard') }}" aria-label="Smart Farmer buyer dashboard" data-i18n-aria-label="buyer.brand.aria">
+                <span class="bd-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21"></path><path d="M24 26C12 26 8 18 9 9c10-1 18 4 18 14"></path><path d="M24 21c0-10 7-15 16-15 1 10-4 17-16 18"></path><path d="M17 39h14"></path></svg>
+                </span>
+                <span class="bd-brand-copy"><strong>Smart Farmer</strong><small data-i18n="buyer.brand.subtitle">Buyer workspace</small></span>
+            </a>
+
+            <button class="bd-nav-toggle" type="button" data-buyer-nav-toggle aria-controls="buyerNav" aria-expanded="false" aria-label="Open dashboard navigation" data-i18n-aria-label="buyer.nav.open">
+                <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            </button>
+
+            <div class="bd-nav-panel" id="buyerNav">
+                <p class="bd-nav-label" data-i18n="buyer.nav.group">Workspace</p>
+                <nav class="bd-nav-links" aria-label="Buyer dashboard sections" data-i18n-aria-label="buyer.nav.aria">
+                    <a class="bd-nav-link{% if page_view|default('dashboard') == 'dashboard' %} is-active{% endif %}" href="{{ '#overview' if page_view|default('dashboard') == 'dashboard' else url_for('buyer_dashboard') }}" data-buyer-nav-link{% if page_view|default('dashboard') == 'dashboard' %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="5" rx="2"></rect><rect x="13" y="10" width="8" height="11" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect></svg>
+                        <span data-i18n="buyer.nav.overview">Overview</span>
+                    </a>
+                    <a class="bd-nav-link{% if page_view == 'produce' %} is-active{% endif %}" href="{{ url_for('buyer_produce_page') }}" data-buyer-nav-link{% if page_view == 'produce' %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-5 0-8-3-8-8 5 0 8 3 8 8Z"></path><path d="M12 20c0-6 3-11 9-13 1 7-3 12-9 13ZM12 20V9"></path></svg>
+                        <span data-i18n="buyer.nav.produce">Browse produce</span><span class="bd-nav-badge" id="produceNavCount">{{ total_produce }}</span>
+                    </a>
+                    <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#prices" data-buyer-nav-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M8 15l4-5 3 2 5-7"></path></svg>
+                        <span data-i18n="buyer.nav.prices">Market prices</span>
+                    </a>
+                    <a class="bd-nav-link{% if page_view == 'offers' %} is-active{% endif %}" href="{{ url_for('buyer_offers_page') }}" data-buyer-nav-link{% if page_view == 'offers' %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg>
+                        <span data-i18n="buyer.nav.offers">My offers</span><span class="bd-nav-badge" id="offersNavCount">{{ total_offers }}</span>
+                    </a>
+                    <a class="bd-nav-link{% if page_view == 'orders' %} is-active{% endif %}" href="{{ url_for('buyer_orders_page') }}" data-buyer-nav-link{% if page_view == 'orders' %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg>
+                        <span data-i18n="buyer.nav.orders">My orders</span><span class="bd-nav-badge" id="ordersNavCount">{{ total_orders }}</span>
+                    </a>
+                </nav>
+                <div class="bd-account-nav">
+                    <p class="bd-nav-label" data-i18n="buyer.nav.account">Account</p>
+                    <a class="bd-nav-link" href="{{ url_for('profile.profile_page') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                        <span data-i18n="buyer.nav.profile">My profile</span>
+                    </a>
+                    <form method="post" action="{{ url_for('logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}">
+                    <button type="submit" class="bd-nav-link bd-logout" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"></path><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path></svg>
+                        <span data-i18n="buyer.nav.logout">Log out</span>
+                    </button>
+                    </form>
+                </div>
+            </div>
+            <p class="bd-sidebar-note" data-i18n="buyer.sidebar.note">Fresh choices from farms across Sri Lanka.</p>
+        </aside>
+
+        <div class="bd-main-column">
+            <header class="bd-topbar" data-site-header>
+                <div class="bd-topbar-copy">
+                    <p data-i18n="buyer.topbar.workspace">Buyer workspace</p>
+                    {% if page_view == 'produce' %}<h1 data-i18n="buyer.produce.title">Fresh produce</h1>
+                    {% elif page_view == 'offers' %}<h1 data-i18n="buyer.offers.title">My offers</h1>
+                    {% elif page_view == 'orders' %}<h1 data-i18n="buyer.orders.title">My orders</h1>
+                    {% else %}<h1 data-i18n="buyer.topbar.title">Your marketplace</h1>{% endif %}
+                </div>
+                <div class="bd-topbar-actions" data-header-actions>
+                    {% if page_view != 'dashboard' %}{{ back_button(url_for('buyer_dashboard')) }}{% endif %}
+                    <label class="bd-sr-only" for="languageSelect" data-i18n="buyer.language">Language</label>
+                    <select id="languageSelect" class="bd-language" aria-label="Choose language" data-i18n-aria-label="public.language.choose">
+                        <option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>English</option>
+                        <option value="si" {% if session.get('language') == 'si' %}selected{% endif %}>සිංහල</option>
+                        <option value="ta" {% if session.get('language') == 'ta' %}selected{% endif %}>தமிழ்</option>
+                    </select>
+                    <button class="bd-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                    <a class="bd-account-chip" href="{{ url_for('profile.profile_page') }}">
+                        <span class="bd-account-avatar" aria-hidden="true">{{ session.get('full_name', 'Buyer')[:1]|upper }}</span>
+                        <span><strong>{{ session.get('full_name', 'Buyer') }}</strong><small data-i18n="buyer.account.role">Buyer account</small></span>
+                    </a>
+                </div>
+            </header>
+
+            <main class="bd-content" id="buyer-content">
+                <section class="bd-hero" id="overview" aria-labelledby="buyer-welcome-title">
+                    <div class="bd-hero-copy">
+                        <p class="bd-eyebrow"><span class="bd-eyebrow-dot" aria-hidden="true"></span><span data-i18n="buyer.hero.eyebrow">Fresh from local farms</span></p>
+                        <h2 id="buyer-welcome-title" data-i18n="buyer.hero.title" data-i18n-param-name="{{ session.get('full_name', 'Buyer')|e }}">Welcome back, {{ session.get('full_name', 'Buyer') }}.</h2>
+                        <p data-i18n="buyer.hero.description">Find fresh produce, compare local prices, and keep your offers and orders in one place.</p>
+                    </div>
+                    <div class="bd-hero-photo" aria-hidden="true">
+                        <img src="{{ url_for('frontend_files', filename='images/public-marketplace-hero.jpg') }}" alt="" fetchpriority="high">
+                    </div>
+                </section>
+
+                <section class="bd-stat-grid" aria-label="Buyer dashboard overview" data-i18n-aria-label="buyer.stats.aria">
+                    <article class="bd-stat-card"><span class="bd-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4C10 4 5 8 5 15c0 3 2 5 5 5 7 0 11-6 10-16Z"></path><path d="M4 21c2-5 6-8 12-11"></path></svg></span><div><p data-i18n="buyer.stats.produce">Available listings</p><strong id="produceCount">{{ total_produce }}</strong></div></article>
+                    <article class="bd-stat-card"><span class="bd-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg></span><div><p data-i18n="buyer.stats.offers">My offers</p><strong id="offersCount">{{ total_offers }}</strong></div></article>
+                    <article class="bd-stat-card"><span class="bd-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg></span><div><p data-i18n="buyer.status.pending">Pending</p><strong id="pendingOffersCount">{{ pending_offers }}</strong><small data-i18n="buyer.stats.offers">My offers</small></div></article>
+                    <article class="bd-stat-card"><span class="bd-stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg></span><div><p data-i18n="buyer.stats.orders">My orders</p><strong id="ordersCount">{{ total_orders }}</strong></div></article>
+                </section>
+
+                <section class="bd-panel bd-search-panel" id="search" aria-labelledby="search-title">
+                    <div class="bd-section-heading">
+                        <div><p class="bd-eyebrow" data-i18n="buyer.search.eyebrow">Find your next fresh delivery</p><h2 id="search-title" data-i18n="buyer.search.title">Browse produce</h2><p data-i18n="buyer.search.description">Search by crop and choose a district to narrow the available listings.</p></div>
+                    </div>
+                    <form class="bd-search-form" method="GET" action="{{ url_for('buyer_produce_page') if page_view == 'produce' else url_for('buyer_dashboard') }}">
+                        <input type="hidden" name="category" id="buyerProduceCategory" value="{{ request.args.get('category', '')|e }}">
+                        <div class="bd-field bd-search-crop"><label for="buyerProduceSearch" data-i18n="buyer.search.cropLabel">Produce name</label><span class="bd-search-input-control"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"></circle><path d="m15.5 15.5 4.2 4.2"></path></svg><input id="buyerProduceSearch" type="search" name="crop" value="{{ request.args.get('crop', '') }}" placeholder="Search vegetables or fruit" data-i18n-placeholder="buyer.search.cropPlaceholder"><button id="buyerProduceSearchClear" class="bd-search-clear" type="button" data-i18n="buyer.search.clearInput">Clear</button></span></div>
+                        <label class="bd-field"><span data-i18n="buyer.search.districtLabel">District</span><select name="district"><option value="" data-i18n="buyer.search.allDistricts">All districts</option>{% for district_name in districts %}<option value="{{ district_name }}" {% if request.args.get('district', '') == district_name %}selected{% endif %}>{{ district_name }}</option>{% endfor %}</select></label>
+                        <button class="bd-button bd-button-primary" type="submit"><span aria-hidden="true">⌕</span><span data-i18n="buyer.search.submit">Search produce</span></button>
+                        <a class="bd-button bd-button-secondary" href="{{ url_for('buyer_produce_page') if page_view == 'produce' else url_for('buyer_dashboard') }}" data-i18n="buyer.search.clear">Clear filters</a>
+                    </form>
+                </section>
+
+                <section class="bd-section" id="produce" aria-labelledby="produce-title">
+                    <div class="bd-section-heading bd-section-heading-inline">
+                        <div><p class="bd-eyebrow" data-i18n="buyer.produce.eyebrow">Available from farmers</p><h2 id="produce-title" data-i18n="buyer.produce.title">Fresh produce</h2><p data-i18n="buyer.produce.description">Review listing details and make an offer directly to a farmer.</p></div>
+                        <div class="bd-section-heading-actions"><span class="bd-count" id="produceSectionCount" data-i18n="buyer.produce.count" data-i18n-param-count="{{ total_produce }}">{{ total_produce }} listings</span><a class="bd-view-more" href="{{ url_for('buyer_produce_page') }}"><span data-i18n="buyer.viewMore">View more</span><span aria-hidden="true">→</span></a></div>
+                    </div>
+                    <div class="bd-produce-category-panel">
+                        <p class="bd-category-filter-label" data-i18n="produce.category.label">Browse by category</p>
+                        <div class="bd-produce-category-filter" id="buyerProduceCategoryFilter" role="group" aria-label="Filter produce by category" data-i18n-aria-label="produce.category.filterLabel"></div>
+                    </div>
+                    {% if produce_list %}
+                    <div class="bd-produce-grid" id="produceList">
+                        {% for item in produce_list %}
+                        <article class="bd-produce-card">
+                            <img class="bd-produce-photo" data-produce-image data-produce-name="{{ item.produce_name }}" data-produce-category="{{ item.category_name|default('', true) }}" alt="Fresh {{ item.produce_name }}" loading="lazy" decoding="async">
+                            <div class="bd-produce-card-head"><span class="bd-availability" data-i18n="buyer.produce.available">Available</span></div>
+                            <h3>{{ item.produce_name }}</h3>
+                            <p class="bd-produce-description">{% if item.description %}{{ item.description }}{% else %}<span data-i18n="buyer.produce.noDescription">Fresh produce listed by a local farmer.</span>{% endif %}</p>
+                            <dl class="bd-produce-details">
+                                <div><dt data-i18n="buyer.produce.quantity">Available quantity</dt><dd>{{ item.quantity }} {{ item.unit }}</dd></div>
+                                <div><dt data-i18n="buyer.produce.price">Price per unit</dt><dd>LKR {{ "%.2f"|format(item.price_per_unit) }} / {{ item.unit }}</dd></div>
+                                <div><dt data-i18n="buyer.produce.location">District</dt><dd>{{ item.district }}</dd></div>
+                                <div><dt data-i18n="buyer.produce.farmer">Farmer</dt><dd>{{ item.farmer_name }}</dd></div>
+                            </dl>
+                            <button class="bd-button bd-button-primary bd-offer-open" type="button" data-offer-open data-produce-id="{{ item.produce_id }}" data-produce-name="{{ item.produce_name }}" data-produce-unit="{{ item.unit }}" data-available-quantity="{{ item.quantity }}">
+                                <span aria-hidden="true">＋</span><span data-i18n="buyer.produce.makeOffer">Make an offer</span>
+                            </button>
+                        </article>
+                        {% endfor %}
+                    </div>
+                    <div class="bd-empty-state bd-search-empty" id="buyerSearchEmpty" hidden><h3 data-i18n="buyer.search.noMatchesTitle">No matching produce</h3><p data-i18n="buyer.search.noMatchesCopy">Try another produce name or clear your search.</p></div>
+                    {% else %}
+                    <div class="bd-empty-state"><span class="bd-empty-icon" aria-hidden="true">⌕</span><h3 data-i18n="buyer.produce.emptyTitle">No listings found</h3><p data-i18n="buyer.produce.emptyText">Try another crop name or district, or clear the filters to see all available produce.</p><a class="bd-button bd-button-secondary" href="{{ url_for('buyer_produce_page') if page_view == 'produce' else url_for('buyer_dashboard') }}" data-i18n="buyer.search.clear">Clear filters</a></div>
+                    {% endif %}
+                    {% if page_view == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="produceList" data-card-selector=".bd-produce-card" aria-live="polite"></div>{% endif %}
+                </section>
+
+                <section class="bd-panel bd-prices-panel" id="prices" aria-labelledby="prices-title">
+                    <div class="bd-section-heading bd-section-heading-inline">
+                        <div><p class="bd-eyebrow" data-i18n="buyer.prices.eyebrow">Local market reference</p><h2 id="prices-title" data-i18n="buyer.prices.title">Latest market prices</h2><p data-i18n="buyer.prices.description">Recent prices help you compare local market information.</p></div>
+                        <span class="bd-count" data-i18n="marketPrices.pageOf" data-i18n-param-page="{{ market_prices_page.page }}" data-i18n-param-pages="{{ market_prices_page.pages }}">Page {{ market_prices_page.page }} of {{ market_prices_page.pages }}</span>
+                    </div>
+                    {% if market_prices %}
+                    <div class="sf-market-price-grid" id="buyer-market-prices">
+                        {% for price in market_prices %}
+                        {% set loop_index = loop.index %}
+                        {{ market_price_card(price, 'LKR %.2f'|format(price.price_per_kg)) }}
+                        {% endfor %}
+                    </div>
+                    <div class="sf-market-price-pagination" data-market-price-pagination="buyer" data-page="{{ market_prices_page.page }}" data-pages="{{ market_prices_page.pages }}" data-per-page="6" aria-live="polite"></div>
+                    {% else %}
+                    <div class="bd-empty-state bd-empty-compact"><h3 data-i18n="buyer.prices.empty">No market prices are available yet.</h3></div>
+                    {% endif %}
+                </section>
+
+                <div class="bd-two-column">
+                    <section class="bd-panel" id="offers" aria-labelledby="offers-title">
+                        <div class="bd-section-heading bd-section-heading-inline"><div><p class="bd-eyebrow" data-i18n="buyer.offers.eyebrow">Keep track of your requests</p><h2 id="offers-title" data-i18n="buyer.offers.title">My offers</h2></div><div class="bd-section-heading-actions"><span class="bd-count" id="offersSectionCount" data-i18n="buyer.offers.count" data-i18n-param-count="{{ total_offers }}">{{ total_offers }} offers</span><a class="bd-view-more" href="{{ url_for('buyer_offers_page') }}"><span data-i18n="buyer.viewMore">View more</span><span aria-hidden="true">→</span></a></div></div>
+                        {% if offer_list %}
+                        <div class="bd-record-list" id="offersList">
+                            {% for offer in offer_list %}
+                            <article class="bd-record-card"><div class="bd-record-heading"><div><p class="bd-record-kicker" data-i18n="buyer.record.offerNumber" data-i18n-param-id="{{ offer.offer_id }}">Offer #{{ offer.offer_id }}</p><h3>{{ offer.produce_name }}</h3></div><span class="bd-status" data-status="{{ offer.status|lower }}" data-i18n="buyer.status.{{ offer.status|lower }}">{{ offer.status|title }}</span></div><dl class="bd-record-details"><div><dt data-i18n="buyer.record.farmer">Farmer</dt><dd>{{ offer.farmer_name }}</dd></div><div><dt data-i18n="buyer.record.quantity">Quantity</dt><dd>{{ offer.quantity }} {{ offer.unit }}</dd></div><div><dt data-i18n="buyer.record.offerPrice">Offered price</dt><dd>LKR {{ "%.2f"|format(offer.offered_price) }} / {{ offer.unit }}</dd></div><div><dt data-i18n="buyer.record.date">Date</dt><dd>{{ offer.created_at }}</dd></div></dl></article>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="bd-empty-state bd-empty-compact" id="offersList"><h3 data-i18n="buyer.offers.emptyTitle">No offers yet</h3><p data-i18n="buyer.offers.emptyText">Offers you send to farmers will appear here.</p></div>
+                        {% endif %}
+                        {% if page_view == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="offersList" data-card-selector=".bd-record-card" aria-live="polite"></div>{% endif %}
+                    </section>
+
+                    <section class="bd-panel" id="orders" aria-labelledby="orders-title">
+                        <div class="bd-section-heading bd-section-heading-inline"><div><p class="bd-eyebrow" data-i18n="buyer.orders.eyebrow">Follow your purchases</p><h2 id="orders-title" data-i18n="buyer.orders.title">My orders</h2></div><div class="bd-section-heading-actions"><span class="bd-count" id="ordersSectionCount" data-i18n="buyer.orders.count" data-i18n-param-count="{{ total_orders }}">{{ total_orders }} orders</span><a class="bd-view-more" href="{{ url_for('buyer_orders_page') }}"><span data-i18n="buyer.viewMore">View more</span><span aria-hidden="true">→</span></a></div></div>
+                        {% if order_list %}
+                        <div class="bd-record-list" id="ordersList">
+                            {% for order in order_list %}
+                            <article class="bd-record-card" data-order-card="{{ order.order_id }}"><div class="bd-record-heading"><div><p class="bd-record-kicker" data-i18n="buyer.record.orderNumber" data-i18n-param-id="{{ order.order_id }}">Order #{{ order.order_id }}</p><h3>{{ order.produce_name }}</h3></div><span class="bd-status" data-status="{{ order.status|lower }}" data-i18n="buyer.status.{{ order.status|lower }}">{{ order.status|title }}</span></div><dl class="bd-record-details"><div><dt data-i18n="buyer.record.farmer">Farmer</dt><dd>{{ order.farmer_name }}</dd></div><div><dt data-i18n="buyer.record.quantity">Quantity</dt><dd>{{ order.quantity }} {{ order.unit }}</dd></div><div><dt data-i18n="buyer.record.total">Total</dt><dd>LKR {{ "%.2f"|format(order.total_amount) }}</dd></div><div><dt data-i18n="buyer.record.date">Date</dt><dd>{{ order.created_at }}</dd></div></dl>{% if order.status == "pending" %}<button class="bd-button bd-button-secondary bd-cancel-order" type="button" data-cancel-order="{{ order.order_id }}" data-i18n="buyer.orders.cancel">Cancel pending order</button>{% endif %}</article>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="bd-empty-state bd-empty-compact" id="ordersList"><h3 data-i18n="buyer.orders.emptyTitle">No orders yet</h3><p data-i18n="buyer.orders.emptyText">Orders created when a farmer accepts your offer will appear here.</p></div>
+                        {% endif %}
+                        {% if page_view == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="ordersList" data-card-selector=".bd-record-card" aria-live="polite"></div>{% endif %}
+                    </section>
+                </div>
+
+                <section class="bd-account-panel" id="account" aria-labelledby="account-title">
+                    <div><p class="bd-eyebrow" data-i18n="buyer.account.eyebrow">Your account</p><h2 id="account-title" data-i18n="buyer.account.title">Account details</h2><p data-i18n="buyer.account.description">Manage your personal details from your profile page.</p></div>
+                    <div class="bd-account-summary"><span class="bd-account-avatar bd-account-avatar-large" aria-hidden="true">{{ session.get('full_name', 'Buyer')[:1]|upper }}</span><div><strong>{{ session.get('full_name', 'Buyer') }}</strong><span data-i18n="buyer.account.role">Buyer account</span></div><a class="bd-button bd-button-secondary" href="{{ url_for('profile.profile_page') }}" data-i18n="buyer.account.edit">Edit profile</a></div>
+                </section>
+
+                <footer class="bd-footer"><span data-i18n="buyer.footer.tagline">Connecting local growers with the people who value fresh produce.</span><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}"><button type="submit" style="border:0;padding:0;background:transparent;color:var(--bd-green-strong);font:inherit;font-weight:700;cursor:pointer" data-i18n="buyer.nav.logout">Log out</button></form></footer>
+            </main>
+        </div>
+    </div>
+
+    <div class="bd-feedback" id="buyerFeedback" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <dialog class="bd-dialog" id="offerDialog" aria-labelledby="offerDialogTitle">
+        <form class="bd-dialog-form" id="offerForm" novalidate>
+            <div class="bd-dialog-heading"><div><p class="bd-eyebrow" data-i18n="buyer.offerDialog.eyebrow">Contact the farmer</p><h2 id="offerDialogTitle" data-i18n="buyer.offerDialog.title">Make an offer</h2><p id="offerProduceInfo" class="bd-dialog-copy"></p></div><button class="bd-dialog-close" type="button" data-close-offer aria-label="Close offer form" data-i18n-aria-label="buyer.dialog.close">×</button></div>
+            <input type="hidden" id="offerProduceId" name="produce_id">
+            <p class="bd-form-message" id="offerFormMessage" role="alert" aria-live="polite"></p>
+            <label class="bd-field"><span data-i18n="buyer.offerDialog.quantity">Quantity to offer</span><input type="number" id="offerQuantity" name="quantity" min="0.01" step="0.01" inputmode="decimal" required></label>
+            <label class="bd-field"><span data-i18n="buyer.offerDialog.price">Your offer price per unit (LKR)</span><input type="number" id="offerPrice" name="offered_price" min="0.01" step="0.01" inputmode="decimal" required></label>
+            <p class="bd-field-hint" id="offerQuantityHint"></p>
+            <div class="bd-dialog-actions"><button class="bd-button bd-button-secondary" type="button" data-close-offer data-i18n="buyer.action.cancel">Cancel</button><button class="bd-button bd-button-primary" id="offerSubmit" type="submit" data-i18n="buyer.offerDialog.submit">Send offer</button></div>
+        </form>
+    </dialog>
+
+    <dialog class="bd-dialog bd-confirm-dialog" id="cancelOrderDialog" aria-labelledby="cancelDialogTitle">
+        <div class="bd-dialog-form"><div class="bd-dialog-heading"><div><p class="bd-eyebrow" data-i18n="buyer.orders.confirmEyebrow">Order update</p><h2 id="cancelDialogTitle" data-i18n="buyer.orders.confirmTitle">Cancel this order?</h2><p class="bd-dialog-copy" data-i18n="buyer.orders.confirmText">Only a pending order can be cancelled. This will update its status and restore the listing quantity.</p></div><button class="bd-dialog-close" type="button" data-close-cancel aria-label="Close confirmation" data-i18n-aria-label="buyer.dialog.close">×</button></div><p class="bd-form-message" id="cancelFormMessage" role="alert" aria-live="polite"></p><div class="bd-dialog-actions"><button class="bd-button bd-button-secondary" type="button" data-close-cancel data-i18n="buyer.action.keepOrder">Keep order</button><button class="bd-button bd-button-danger" id="confirmCancelOrder" type="button" data-i18n="buyer.orders.confirmCancel">Yes, cancel order</button></div></div>
+    </dialog>
+</body>
+</html>
+
+
+

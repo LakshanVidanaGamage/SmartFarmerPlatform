@@ -1,0 +1,74 @@
+.sf-farmer-dashboard .sf-overview-pagination {
+    --overview-green: var(--fd-green-strong);
+    --overview-surface: var(--fd-surface);
+    --overview-line: var(--fd-line);
+    --overview-muted: var(--fd-muted);
+}
+
+.sf-buyer-dashboard .sf-overview-pagination {
+    --overview-green: var(--bd-green-strong);
+    --overview-surface: var(--bd-surface);
+    --overview-line: var(--bd-line);
+    --overview-muted: var(--bd-muted);
+}
+
+.sf-farmer-dashboard .fd-card-grid > [hidden],
+.sf-farmer-dashboard .fd-order-list > [hidden],
+.sf-buyer-dashboard .bd-produce-grid > [hidden],
+.sf-buyer-dashboard .bd-record-list > [hidden] {
+    display: none !important;
+}
+
+.sf-overview-pagination:not(:empty) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.sf-overview-pagination > span {
+    grid-column: 2;
+    color: var(--overview-muted);
+    font-size: .875rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.sf-overview-pagination > button {
+    min-height: 40px;
+    padding: 9px 17px;
+    border: 1px solid var(--overview-line);
+    border-radius: 12px;
+    background: var(--overview-surface);
+    color: var(--overview-green);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.sf-overview-pagination > button:first-child { grid-column: 1; justify-self: start; }
+.sf-overview-pagination > button:last-child { grid-column: 3; justify-self: end; }
+.sf-overview-pagination > button:hover:not(:disabled) {
+    border-color: var(--overview-green);
+    background: var(--overview-green);
+    color: var(--overview-surface);
+    transform: translateY(-1px);
+}
+.sf-overview-pagination > button:focus-visible {
+    outline: 3px solid var(--overview-green);
+    outline-offset: 2px;
+}
+.sf-overview-pagination > button:disabled { opacity: .5; cursor: not-allowed; }
+
+@media (max-width: 599px) {
+    .sf-overview-pagination:not(:empty) { gap: 6px; }
+    .sf-overview-pagination > button { min-height: 38px; padding: 8px 11px; font-size: .8125rem; }
+    .sf-overview-pagination > span { font-size: .8125rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sf-overview-pagination > button { transition: none; }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% set selected_language = session.get('language', 'en') %}
+{% if selected_language not in ['en', 'si', 'ta'] %}{% set selected_language = 'en' %}{% endif %}
+<html lang="{{ selected_language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#176b3a">
+    <title>Smart Farmer Platform | Choose your language</title>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem("sf-theme");
+                var theme = savedTheme === "dark" ? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.style.colorScheme = theme;
+            } catch (error) {
+                document.documentElement.setAttribute("data-theme", "light");
+            }
+        }());
+    </script>
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/style.css') }}">
+</head>
+<body class="sf-auth-page sf-language-auth-page">
+    <main class="sf-auth-layout">
+        <aside class="sf-auth-visual" aria-labelledby="auth-welcome-title">
+            <a class="sf-auth-brand" href="{{ url_for('language_selection') }}" aria-label="Smart Farmer Platform" data-i18n-aria-label="auth.brandLabel">
+                <span class="sf-auth-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21M24 27C12 27 8 19 9 10c10-1 18 4 18 14M24 21c0-10 7-15 16-15 1 10-4 17-16 18M17 39h14"/></svg>
+                </span>
+                <span>Smart Farmer</span>
+            </a>
+            <div class="sf-auth-visual-copy">
+                <span class="sf-auth-eyebrow" data-i18n="auth.eyebrow">A marketplace that grows with you</span>
+                <h1 id="auth-welcome-title" data-i18n="auth.welcome">Good things grow when we connect.</h1>
+                <p data-i18n="auth.description">A trusted place for farmers and buyers to meet, share fresh produce and grow together.</p>
+            </div>
+            <p class="sf-auth-visual-footnote" data-i18n="auth.footnote">Connecting farmers and buyers across Sri Lanka.</p>
+        </aside>
+
+        <section class="sf-auth-panel sf-language-auth-panel" aria-labelledby="language-title">
+            <div class="sf-auth-card sf-language-card sf-language-content">
+                <div class="sf-language-card-top-row">
+                    <span class="sf-auth-card-kicker" data-i18n="stepLabel">Welcome</span>
+                    <button type="button" class="sf-theme-btn sf-auth-theme" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                </div>
+
+                <div class="sf-language-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20v-8m0 3C5.5 15 3.5 11 4 5c5.5-.4 9.4 2.6 9.5 8m-1.5-3c0-5 3.4-7.6 8-7.5.5 5-2 8.2-7.5 8.5"/></svg>
+                </div>
+                <div class="auth-heading sf-language-heading-copy">
+                    <h2 id="language-title" data-i18n="languageTitle">Choose your language</h2>
+                    <p data-i18n="languageHint">Select the language you are most comfortable using.</p>
+                </div>
+
+                <nav class="sf-language-options" aria-label="Language selection" data-language-options>
+                    <a class="sf-language-option{% if selected_language == 'en' %} is-selected{% endif %}" href="{{ url_for('set_language', language='en') }}" lang="en" data-language-choice="en" aria-current="{% if selected_language == 'en' %}page{% else %}false{% endif %}">
+                        <span class="sf-language-option-mark" aria-hidden="true">EN</span>
+                        <span class="sf-language-option-copy"><strong>English</strong><small>English language</small></span>
+                        <span class="sf-language-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a class="sf-language-option{% if selected_language == 'si' %} is-selected{% endif %}" href="{{ url_for('set_language', language='si') }}" lang="si" data-language-choice="si" aria-current="{% if selected_language == 'si' %}page{% else %}false{% endif %}">
+                        <span class="sf-language-option-mark" aria-hidden="true">&#x0DC3;&#x0DD2;</span>
+                        <span class="sf-language-option-copy"><strong>&#x0DC3;&#x0DD2;&#x0D82;&#x0DC4;&#x0DBD;</strong><small>&#x0DC3;&#x0DD2;&#x0D82;&#x0DC4;&#x0DBD; &#x0DB7;&#x0DCF;&#x0DC2;&#x0DCF;&#x0DC0;</small></span>
+                        <span class="sf-language-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a class="sf-language-option{% if selected_language == 'ta' %} is-selected{% endif %}" href="{{ url_for('set_language', language='ta') }}" lang="ta" data-language-choice="ta" aria-current="{% if selected_language == 'ta' %}page{% else %}false{% endif %}">
+                        <span class="sf-language-option-mark" aria-hidden="true">&#x0BA4;</span>
+                        <span class="sf-language-option-copy"><strong>&#x0BA4;&#x0BAE;&#x0BBF;&#x0BB4;&#x0BCD;</strong><small>&#x0BA4;&#x0BAE;&#x0BBF;&#x0BB4;&#x0BCD; &#x0BAE;&#x0BCA;&#x0BB4;&#x0BBF;</small></span>
+                        <span class="sf-language-arrow" aria-hidden="true">→</span>
+                    </a>
+                </nav>
+
+                <a class="primary-btn sf-language-continue" id="languageContinue" href="{{ url_for('set_language', language=selected_language) }}" data-i18n="continueLabel">Continue</a>
+                <p class="sf-auth-secure-note" data-i18n="selectionNote">You can change your language any time.</p>
+            </div>
+        </section>
+    </main>
+    <script src="{{ url_for('frontend_files', filename='js/i18n.js') }}"></script>
+    <script src="{{ url_for('frontend_files', filename='js/main.js') }}"></script>
+</body>
+</html>

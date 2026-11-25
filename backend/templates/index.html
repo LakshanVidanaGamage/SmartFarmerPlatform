@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html lang="{{ language if language in ['si', 'en', 'ta'] else 'en' }}">
+{% from "partials/market_price_card.html" import market_price_card %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover fresh produce, compare local market prices, and connect directly with Sri Lankan farmers through Smart Farmer.">
+    <meta name="theme-color" content="#f7faf5">
+    <title data-i18n="home.title">Smart Farmer | A better market starts at the farm</title>
+    {% include "partials/theme_init.html" %}
+    <link rel="stylesheet" href="/frontend/css/style.css?v=market-price-cards-home-2">
+    <link rel="stylesheet" href="/frontend/css/market-prices.css?v=1">
+    <link rel="stylesheet" href="/frontend/css/produce-cards.css?v=4">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-home">
+
+<a class="sf-skip-link" href="#main-content" data-i18n="home.skip">Skip to content</a>
+
+{% include "partials/public_header.html" %}
+
+<main id="main-content">
+    <section class="sf-hero" aria-labelledby="hero-title">
+        <div class="sf-container sf-hero-grid">
+            <div class="sf-hero-copy">
+                <p class="sf-eyebrow"><span class="sf-eyebrow-dot"></span><span data-i18n="home.hero.eyebrow">Sri Lankan agriculture, connected</span></p>
+                <h1 id="hero-title"><span data-i18n="home.hero.title">A better market starts</span> <span data-i18n="home.hero.emphasis">at the farm.</span></h1>
+                <p class="sf-hero-description">
+                    <span data-i18n="home.hero.description">Discover fresh local produce, compare market prices, and connect directly with the people who grow your food.</span>
+                </p>
+                <div class="sf-hero-actions">
+                    <a href="#produce" class="sf-btn sf-btn-primary">
+                        <span data-i18n="home.hero.explore">Explore produce</span> <span aria-hidden="true">→</span>
+                    </a>
+                    <a href="{{ url_for('register_page') }}" class="sf-btn sf-btn-secondary" data-i18n="home.hero.join">Join the marketplace</a>
+                </div>
+                <div class="sf-hero-note">
+                    <span class="sf-note-mark" aria-hidden="true">✓</span>
+                    <span data-i18n="home.hero.note">Fresh listings and local prices, all in one place</span>
+                </div>
+            </div>
+
+            <div class="sf-hero-visual">
+                <img src="/frontend/images/public-marketplace-hero.jpg"
+                     alt="A Sri Lankan farmer tending rice fields in the morning light" data-i18n-alt="home.hero.imageAlt"
+                     fetchpriority="high">
+                <div class="sf-image-shade"></div>
+                <div class="sf-photo-label">
+                    <span class="sf-photo-label-icon" aria-hidden="true">SF</span>
+                    <span><strong data-i18n="home.hero.photoTitle">Rooted in local farming</strong><small data-i18n="home.hero.photoNote">Growing stronger together</small></span>
+                </div>
+                <div class="sf-photo-stamp" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false">
+                        <path d="M24 39V22"></path>
+                        <path d="M24 27C14 27 10 20 11 12c8-1 16 4 16 13"></path>
+                        <path d="M24 22c1-8 7-12 14-12 1 8-4 14-14 15"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sf-highlights" aria-label="Marketplace benefits" data-i18n-aria-label="home.highlights.label">
+        <div class="sf-container sf-highlights-grid">
+            <article class="sf-highlight-card">
+                <span class="sf-highlight-icon sf-icon-leaf" aria-hidden="true">
+                    <svg viewBox="0 0 32 32"><path d="M26 5C14 5 6 10 6 20c0 4 3 7 7 7C23 27 27 17 26 5Z"></path><path d="M7 27c4-7 9-11 16-15"></path></svg>
+                </span>
+                <div><h2 data-i18n="home.feature.fresh.title">Fresh from the farm</h2><p data-i18n="home.feature.fresh.copy">Explore produce listed by local farmers.</p></div>
+            </article>
+            <article class="sf-highlight-card">
+                <span class="sf-highlight-icon sf-icon-chart" aria-hidden="true">
+                    <svg viewBox="0 0 32 32"><path d="M5 26h22M8 22v-7m8 7V9m8 13v-11"></path><path d="m7 11 7-5 7 4 5-5"></path></svg>
+                </span>
+                <div><h2 data-i18n="home.feature.prices.title">Clear market prices</h2><p data-i18n="home.feature.prices.copy">See recent prices from local markets.</p></div>
+            </article>
+            <article class="sf-highlight-card">
+                <span class="sf-highlight-icon sf-icon-people" aria-hidden="true">
+                    <svg viewBox="0 0 32 32"><circle cx="12" cy="11" r="4"></circle><path d="M4 26v-2a8 8 0 0 1 16 0v2H4Z"></path><path d="M21 8a4 4 0 0 1 0 7m3 3a7 7 0 0 1 4 6v2h-5"></path></svg>
+                </span>
+                <div><h2 data-i18n="home.feature.connect.title">Direct connections</h2><p data-i18n="home.feature.connect.copy">Bring buyers and growers closer.</p></div>
+            </article>
+            <article class="sf-highlight-card">
+                <span class="sf-highlight-icon sf-icon-hand" aria-hidden="true">
+                    <svg viewBox="0 0 32 32"><path d="M5 17h5l3 3h7a3 3 0 0 0 3-3h-7"></path><path d="m10 17 4-5h8l5 4-7 8h-8l-6-4v-3Z"></path></svg>
+                </span>
+                <div><h2 data-i18n="home.feature.trade.title">Trade with confidence</h2><p data-i18n="home.feature.trade.copy">Manage offers and orders in one place.</p></div>
+            </article>
+        </div>
+    </section>
+
+    <div class="sf-home-marketplace-grid">
+    <section class="sf-section sf-produce-section" id="produce" aria-labelledby="produce-title">
+        <div class="sf-container">
+            <div class="sf-section-heading">
+                <div>
+                    <p class="sf-eyebrow" data-i18n="home.produce.eyebrow">Recently listed</p>
+                    <h2 id="produce-title" data-i18n="home.produce.title">Fresh produce, close to home</h2>
+                    <p class="sf-section-intro" data-i18n="home.produce.copy">Browse the latest listings shared by farmers across Sri Lanka.</p>
+                </div>
+                <a class="sf-text-link" href="{{ url_for('public_produce') }}"><span data-i18n="home.produce.sell">View more</span> <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="sf-produce-grid sf-fresh-produce-grid">
+                {% for item in produce_list[:4] %}
+                <article class="sf-produce-card">
+                    <div class="sf-product-art sf-product-art-{{ loop.index }}">
+                        <img class="sf-product-photo" data-produce-image data-produce-name="{{ item.produce_name }}" data-produce-category="{{ item.category_name|default('', true) }}" alt="Fresh {{ item.produce_name }}" loading="lazy" decoding="async">
+                        <span class="sf-art-tag" data-i18n="home.produce.local">Local harvest</span>
+                    </div>
+                    <div class="sf-product-content">
+                        <div class="sf-product-topline">
+                            <span class="sf-product-location"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14s5-5 5-8a5 5 0 0 0-10 0c0 3 5 8 5 8Z"></path><circle cx="8" cy="6" r="1.5"></circle></svg>{% if item.district %}{{ item.district }}{% else %}<span data-i18n="home.country">Sri Lanka</span>{% endif %}</span>
+                            <span class="sf-availability"><i></i> <span data-i18n="home.produce.available">Available</span></span>
+                        </div>
+                        <h3>{{ item.produce_name }}</h3>
+                        <p class="sf-product-description">{% if item.description %}{{ item.description }}{% else %}<span data-i18n="profile.farmer.description">Fresh produce listed by this farmer.</span>{% endif %}</p>
+                        <div class="sf-product-bottom">
+                            <div class="sf-product-price">Rs. {{ '%.2f'|format(item.price_per_unit|float) }}<small> / {{ item.unit }}</small></div>
+                            <span class="sf-product-quantity">{{ item.quantity }} {{ item.unit }} <span data-i18n="home.produce.quantityAvailable">available</span></span>
+                        </div>
+                        <a class="sf-farmer-link" href="{{ url_for('public_farmer_profile', farmer_id=item.farmer_id) }}"><span data-i18n="home.produce.meetFarmer">Meet the farmer</span> <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+                {% else %}
+                <div class="sf-empty-state">
+                    <span class="sf-empty-icon" aria-hidden="true">+</span>
+                    <h3 data-i18n="home.produce.emptyTitle">New harvests are on the way</h3>
+                    <p data-i18n="home.produce.emptyCopy">There are no available produce listings right now. Please check back soon.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="sf-section sf-prices-section" id="prices" aria-labelledby="prices-title">
+        <div class="sf-container sf-prices-layout">
+            <div class="sf-prices-intro">
+                <p class="sf-eyebrow" data-i18n="home.prices.eyebrow">Market snapshot</p>
+                <h2 id="prices-title" data-i18n="home.prices.title">Know the market. Plan with confidence.</h2>
+                <p data-i18n="home.prices.copy">Review the latest prices published for local markets and produce.</p>
+                <div class="sf-market-price-actions">
+                    <a href="{{ url_for('register_page') }}" class="sf-btn sf-btn-primary sf-home-cta"><span data-i18n="home.prices.join">Join the marketplace</span> <span aria-hidden="true">→</span></a>
+                    {% if market_prices|length > 0 %}
+                    <a class="sf-btn sf-btn-primary sf-market-price-toggle sf-home-cta" href="{{ url_for('public_market_prices') }}" data-i18n="marketPrices.viewMore">View More</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="sf-prices-list">
+                <p class="sf-prices-list-label" data-i18n="home.prices.tableTitle">Latest market prices</p>
+                {% if market_prices %}
+                <div class="sf-market-price-grid" id="public-market-prices">
+                    {% for price in market_prices[:6] %}
+                    {% set loop_index = loop.index %}
+                    {{ market_price_card(price, 'Rs. %.2f'|format(price.price_per_kg|float)) }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="sf-prices-empty" data-i18n="home.prices.empty">Market prices will appear here when they are available.</p>
+                {% endif %}
+                <p class="sf-prices-note" data-i18n="home.prices.note">Prices are provided for reference and may vary by location.</p>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <section class="sf-home-about sf-section" id="about" aria-labelledby="about-title">
+        <div class="sf-container sf-home-about-layout">
+            <div class="sf-home-about-photo">
+                <img src="/frontend/images/public-marketplace-hero.jpg" alt="" loading="lazy">
+                <span class="sf-home-photo-caption" data-i18n="home.hero.photoTitle">Rooted in local farming</span>
+            </div>
+            <div class="sf-home-about-copy">
+                <p class="sf-eyebrow" data-i18n="home.about.eyebrow">About Smart Farmer</p>
+                <h2 id="about-title" data-i18n="home.about.title">A marketplace built around local growers</h2>
+                <p data-i18n="home.about.copy">Smart Farmer helps farmers share current harvests and gives buyers a direct way to find local produce.</p>
+                <a href="{{ url_for('public_produce') }}" class="sf-btn sf-btn-primary sf-home-cta"><span data-i18n="home.audience.buyer.cta">Explore produce</span> <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="sf-home-how sf-section" aria-labelledby="how-title">
+        <div class="sf-container">
+            <div class="sf-section-heading sf-home-centered-heading">
+                <div>
+                    <p class="sf-eyebrow" data-i18n="home.how.eyebrow">How it works</p>
+                    <h2 id="how-title" data-i18n="home.how.title">Simple steps from harvest to order</h2>
+                    <p class="sf-section-intro" data-i18n="home.how.copy">Explore local listings, make an offer, and manage accepted orders in one place.</p>
+                </div>
+            </div>
+            <div class="sf-home-steps">
+                <article class="sf-home-step"><span aria-hidden="true">01</span><h3 data-i18n="home.how.step1.title">Explore local produce</h3><p data-i18n="home.how.step1.copy">Browse current farm listings and compare quantity, district, and price.</p></article>
+                <article class="sf-home-step"><span aria-hidden="true">02</span><h3 data-i18n="home.how.step2.title">Make an offer</h3><p data-i18n="home.how.step2.copy">Choose a listing and send your proposed quantity and price directly to the farmer.</p></article>
+                <article class="sf-home-step"><span aria-hidden="true">03</span><h3 data-i18n="home.how.step3.title">Complete your order</h3><p data-i18n="home.how.step3.copy">Follow accepted offers and manage the next steps from your account.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="sf-home-audience sf-section" aria-labelledby="audience-title">
+        <div class="sf-container">
+            <div class="sf-section-heading sf-home-centered-heading">
+                <div><p class="sf-eyebrow" data-i18n="home.audience.eyebrow">One marketplace, two communities</p><h2 id="audience-title" data-i18n="home.feature.connect.title">Direct connections</h2></div>
+            </div>
+            <div class="sf-home-audience-grid">
+                <article class="sf-home-audience-card sf-home-audience-farmer">
+                    <span class="sf-home-audience-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 27V14M16 20C8 20 5 15 6 8c7 0 12 4 11 11m-1-6c1-7 6-10 12-9 0 7-4 11-12 12M8 27h16"></path></svg></span>
+                    <div><h3 data-i18n="home.audience.farmer.title">Grow your customer reach</h3><p data-i18n="home.audience.farmer.copy">Share your available harvest and manage incoming offers and orders in your farmer workspace.</p></div>
+                    <a class="sf-btn sf-btn-primary sf-home-cta" href="{{ url_for('register_page') }}"><span data-i18n="home.audience.farmer.cta">Start selling</span><span aria-hidden="true">→</span></a>
+                </article>
+                <article class="sf-home-audience-card sf-home-audience-buyer">
+                    <span class="sf-home-audience-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M4 6h3l3 15h15l3-10H9M12 26h.01M23 26h.01M12 16l3-4 3 3 4-5"></path></svg></span>
+                    <div><h3 data-i18n="home.audience.buyer.title">Find fresh local produce</h3><p data-i18n="home.audience.buyer.copy">Explore listings from local farmers and send offers on the produce you need.</p></div>
+                    <a class="sf-btn sf-btn-primary sf-home-cta" href="{{ url_for('public_produce') }}"><span data-i18n="home.audience.buyer.cta">Explore produce</span><span aria-hidden="true">→</span></a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="sf-cta-section" id="get-started" aria-labelledby="get-started-title">
+        <div class="sf-container">
+            <div class="sf-cta-card">
+                <div class="sf-cta-art" aria-hidden="true">
+                    <svg viewBox="0 0 150 130" focusable="false">
+                        <path d="M75 113V57"></path>
+                        <path d="M75 83C42 83 31 63 36 36c26 0 43 15 39 45Z"></path>
+                        <path d="M75 66c3-29 22-42 49-38 0 26-18 42-49 44Z"></path>
+                        <path d="M51 113h48"></path>
+                    </svg>
+                </div>
+                <div class="sf-cta-copy">
+                    <p class="sf-eyebrow" data-i18n="home.cta.eyebrow">Grow with your community</p>
+                    <h2 id="get-started-title" data-i18n="home.cta.title">A stronger harvest begins with a better connection.</h2>
+                    <p data-i18n="home.cta.copy">Join a marketplace built to help farmers and buyers find each other and move local produce forward.</p>
+                </div>
+                <a href="{{ url_for('register_page') }}" class="sf-btn sf-btn-cta"><span data-i18n="home.cta.join">Create your account</span> <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% include "partials/public_footer.html" %}
+
+<script src="/frontend/js/i18n.js?v=market-price-cards-1"></script>
+<script src="/frontend/js/main.js"></script>
+<script src="/frontend/js/produce-images.js?v=market-price-cards-home-2"></script>
+</body>
+</html>
+
+
+

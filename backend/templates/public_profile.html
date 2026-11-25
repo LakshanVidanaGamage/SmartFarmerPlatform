@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View a farmer's public profile and currently available produce on Smart Farmer.">
+    {% if farmer %}<title data-i18n="profile.farmer.title" data-i18n-param-name="{{ farmer.full_name }}">{{ farmer.full_name }} | Farmer Profile | Smart Farmer</title>{% else %}<title data-i18n="profile.farmer.notFoundTitle">Farmer Not Found | Smart Farmer</title>{% endif %}
+    {% include "partials/theme_init.html" %}
+    <link rel="stylesheet" href="/frontend/css/style.css?v=produce-category-library-20261115-5">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-public-page">
+{% include "partials/public_header.html" %}
+
+<main class="sf-public-main sf-profile-main" id="main-content">
+    <div class="sf-container">
+        {{ back_button(url_for('public_farmers')) }}
+
+        {% if farmer %}
+        <section class="sf-profile-hero">
+            <div class="sf-profile-avatar sf-profile-avatar-large" aria-hidden="true">{{ farmer.full_name[:1]|upper }}</div>
+            <div class="sf-profile-summary">
+                <p class="sf-eyebrow" data-i18n="profile.farmer.eyebrow">Farmer profile</p>
+                <h1>{{ farmer.full_name }}</h1>
+                <p class="sf-profile-role" data-i18n="profile.farmer.role">Registered farmer on Smart Farmer</p>
+                {% if farmer_districts %}
+                <div class="sf-tag-list sf-profile-districts" aria-label="Districts with available produce" data-i18n-aria-label="profile.farmer.districts">
+                    {% for district in farmer_districts %}
+                    <span class="sf-tag">{{ district }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="sf-muted-copy" data-i18n="profile.farmer.noDistrict">District information appears when produce is listed as available.</p>
+                {% endif %}
+            </div>
+            <a class="sf-btn sf-btn-primary sf-profile-cta" href="#available-produce"><span data-i18n="profile.farmer.explore">Explore available produce</span> <span aria-hidden="true">↓</span></a>
+        </section>
+
+        <section class="sf-directory-section sf-profile-produce" id="available-produce" aria-labelledby="farmer-produce-title">
+            <div class="sf-directory-heading">
+                <div>
+                    <p class="sf-eyebrow" data-i18n="profile.farmer.listingsEyebrow">Current listings</p>
+                    <h2 id="farmer-produce-title" data-i18n="profile.farmer.produceTitle">Available produce</h2>
+                </div>
+                <p class="sf-result-count" data-i18n="profile.farmer.count" data-i18n-param-count="{{ produce_list|length }}">{{ produce_list|length }} available listings</p>
+            </div>
+
+            <div class="sf-produce-list-grid">
+                {% for item in produce_list %}
+                <article class="sf-public-produce-card">
+                    <div class="sf-public-produce-art">
+                        <img class="sf-produce-photo sf-public-produce-photo" data-produce-image data-produce-name="{{ item.produce_name }}" data-produce-category="{{ item.category_name|default('', true) }}" alt="Fresh {{ item.produce_name }}" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sf-public-produce-copy">
+                        <p class="sf-card-kicker">{% if item.district %}{{ item.district }}{% else %}<span data-i18n="profile.farmer.local">Local listing</span>{% endif %}</p>
+                        <h3>{{ item.produce_name }}</h3>
+                        <p class="sf-public-produce-description">{% if item.description %}{{ item.description }}{% else %}<span data-i18n="profile.farmer.description">Fresh produce listed by this farmer.</span>{% endif %}</p>
+                        <div class="sf-public-produce-facts">
+                            <strong>Rs. {{ '%.2f'|format(item.price_per_unit|float) }} <small>/ {{ item.unit }}</small></strong>
+                            <span>{{ item.quantity }} {{ item.unit }} <span data-i18n="profile.farmer.quantityAvailable">available</span></span>
+                        </div>
+                    </div>
+                </article>
+                {% else %}
+                <div class="sf-directory-empty">
+                    <span class="sf-empty-icon" aria-hidden="true">+</span>
+                    <h3 data-i18n="profile.farmer.emptyTitle">No available produce right now</h3>
+                    <p data-i18n="profile.farmer.emptyCopy">This farmer has no active produce listings at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% else %}
+        <section class="sf-profile-not-found">
+            <span class="sf-empty-icon" aria-hidden="true">?</span>
+            <p class="sf-eyebrow" data-i18n="profile.farmer.unavailableEyebrow">Profile unavailable</p>
+            <h1 data-i18n="profile.farmer.notFound">Farmer not found</h1>
+            <p class="sf-muted-copy" data-i18n="profile.farmer.unavailableCopy">This public farmer profile is unavailable.</p>
+            <a class="sf-btn sf-btn-primary" href="{{ url_for('public_farmers') }}" data-i18n="profile.farmer.browse">Browse farmers</a>
+        </section>
+        {% endif %}
+    </div>
+</main>
+
+{% include "partials/public_footer.html" %}
+<script src="/frontend/js/i18n.js?v=produce-category-library-20261115-5"></script>
+<script src="/frontend/js/main.js"></script>
+<script src="/frontend/js/produce-images.js?v=produce-category-library-20261115-5"></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,25 @@
+<footer class="sf-footer">
+    <div class="sf-container">
+        <div class="sf-footer-main">
+            <a href="{{ url_for('public_dashboard') }}" class="sf-logo sf-footer-logo">
+                <span class="sf-logo-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21"></path><path d="M24 26C12 26 8 18 9 9c10-1 18 4 18 14"></path><path d="M24 21c0-10 7-15 16-15 1 10-4 17-16 18"></path><path d="M17 39h14"></path></svg>
+                </span>
+                <span class="sf-logo-type">Smart Farmer<span data-i18n="public.brand.marketplace">MARKETPLACE</span></span>
+            </a>
+            <p class="sf-footer-about" data-i18n="public.footer.tagline">Connecting local growers, fresh produce, and the people who value it.</p>
+            <nav class="sf-footer-links" aria-label="Footer navigation" data-i18n-aria-label="home.footer.label">
+                <a href="{{ url_for('public_dashboard') }}" data-i18n="public.footer.home">Home</a>
+                <a href="{{ url_for('public_dashboard') }}#produce" data-i18n="public.footer.produce">Fresh Produce</a>
+                <a href="{{ url_for('public_market_prices') }}" data-i18n="public.footer.prices">Market Prices</a>
+                <a href="{{ url_for('public_farmers') }}" data-i18n="public.footer.farmers">Farmers</a>
+                <a href="{{ url_for('public_buyers') }}" data-i18n="public.footer.buyers">Buyers</a>
+                <a href="{{ url_for('public_dashboard') }}#about" data-i18n="public.footer.about">About</a>
+            </nav>
+        </div>
+        <div class="sf-footer-bottom">
+            <span data-i18n="public.footer.copyright">© 2026 Smart Farmer Platform</span>
+            <span data-i18n="public.footer.note">Rooted in Sri Lanka. Growing together.</span>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,72 @@
+.sf-back-button {
+    box-sizing: border-box;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 15px;
+    border: 1px solid #cbdccf;
+    border-radius: 12px;
+    background: #fff;
+    color: #176b3a;
+    appearance: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.sf-public-main .sf-back-button { margin-bottom: 16px; }
+
+.sf-back-button svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sf-back-button:hover {
+    transform: translateX(-2px);
+    border-color: #176b3a;
+    background: #f0f7ef;
+    color: #124f2d;
+    box-shadow: 0 5px 14px rgba(23, 107, 58, .12);
+}
+
+.sf-back-button:focus-visible {
+    outline: 3px solid rgba(68, 145, 84, .38);
+    outline-offset: 3px;
+}
+
+html[data-theme="dark"] .sf-back-button {
+    border-color: #426950;
+    background: #203d2d;
+    color: #d8f0d8;
+}
+
+html[data-theme="dark"] .sf-back-button:hover {
+    border-color: #8abd78;
+    background: #294b37;
+    color: #f0fae8;
+}
+
+@media (max-width: 620px) {
+    .sf-back-button {
+        min-height: 44px;
+        gap: 7px;
+        padding-inline: 12px;
+        font-size: 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sf-back-button { transition: none; }
+}

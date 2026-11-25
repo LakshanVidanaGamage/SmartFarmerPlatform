@@ -1,0 +1,8 @@
+{% macro back_button(destination=None, button_id=None) -%}
+{% if destination %}<a class="sf-back-button" href="{{ destination }}">{% else %}<button class="sf-back-button" type="button"{% if button_id %} id="{{ button_id }}"{% endif %}>{% endif %}
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M19 12H5M12 19l-7-7 7-7"></path>
+    </svg>
+    <span data-i18n="common.back">Back</span>
+{% if destination %}</a>{% else %}</button>{% endif %}
+{%- endmacro %}

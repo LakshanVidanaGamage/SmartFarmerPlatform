@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse public buyer profiles registered on Smart Farmer.">
+    <title data-i18n="buyers.pageTitle">Buyers | Smart Farmer</title>
+    {% include "partials/theme_init.html" %}
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="/frontend/css/public-directories.css?v=1">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-public-page sf-directory-page">
+{% include "partials/public_header.html" %}
+
+<main class="sf-public-main" id="main-content">
+    <section class="sf-directory-hero sf-buyer-directory-hero">
+        <div class="sf-container">
+            {{ back_button(url_for('public_dashboard')) }}
+            <p class="sf-eyebrow" data-i18n="buyers.hero.eyebrow">Marketplace community</p>
+            <h1 data-i18n="buyers.hero.title">Meet buyers on Smart Farmer.</h1>
+            <p class="sf-directory-lead" data-i18n="buyers.hero.copy">Browse public buyer profiles and learn who is part of the marketplace.</p>
+
+            <form class="sf-filter-form sf-buyer-search-form" method="get" action="{{ url_for('public_buyers') }}">
+                <label class="sf-search-field">
+                    <span class="sf-sr-only" data-i18n="buyers.search.label">Search buyers by name</span>
+                    <input type="search" name="q" value="{{ search }}" placeholder="Search buyers by name" data-i18n-placeholder="buyers.search.placeholder">
+                </label>
+                <button class="sf-btn sf-btn-primary" type="submit" data-i18n="buyers.search.submit">Search</button>
+                {% if search %}
+                <a class="sf-clear-filter" href="{{ url_for('public_buyers') }}" data-i18n="buyers.search.clear">Clear search</a>
+                {% endif %}
+            </form>
+            <p class="sf-filter-note" data-i18n="buyers.district.note">Buyer districts and private account details are not part of public profiles.</p>
+        </div>
+    </section>
+
+    <section class="sf-directory-section sf-container" aria-labelledby="buyers-results-title">
+        <div class="sf-directory-heading">
+            <div>
+                <p class="sf-eyebrow" data-i18n="buyers.results.eyebrow">The people who source local produce</p>
+                <h2 id="buyers-results-title" data-i18n="buyers.results.title">Registered buyers</h2>
+            </div>
+            <p class="sf-result-count" data-i18n="buyers.results.count" data-i18n-param-count="{{ buyers|length }}">{{ buyers|length }} registered buyers</p>
+        </div>
+
+        <div class="sf-directory-grid sf-buyer-grid" id="buyers-directory-grid">
+            {% for buyer in buyers %}
+            <article class="sf-directory-card sf-buyer-card" data-directory-card{% if loop.index > 6 %} hidden{% endif %}>
+                <div class="sf-directory-card-head">
+                    <span class="sf-profile-avatar sf-buyer-avatar" aria-hidden="true">{{ buyer.full_name[:1]|upper }}</span>
+                    <div>
+                        <p class="sf-card-kicker" data-i18n="buyers.card.account">Buyer account</p>
+                        <h3>{{ buyer.full_name }}</h3>
+                    </div>
+                </div>
+                <p class="sf-buyer-public-note" data-i18n="buyers.card.note">Public profile information is limited to details shared on the marketplace.</p>
+                <a class="sf-card-action" href="{{ url_for('public_buyer_profile', buyer_id=buyer.user_id) }}">
+                    <span data-i18n="buyers.card.action">View public profile</span> <span aria-hidden="true">→</span>
+                </a>
+            </article>
+            {% else %}
+            <div class="sf-directory-empty">
+                <span class="sf-empty-icon" aria-hidden="true">+</span>
+                <h3 data-i18n="buyers.empty.title">No buyers match this search</h3>
+                <p data-i18n="buyers.empty.copy">Try another name or clear the search to browse all buyers.</p>
+                {% if search %}
+                <a class="sf-text-link" href="{{ url_for('public_buyers') }}" data-i18n="buyers.empty.all">View all buyers</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <nav class="sf-directory-pagination" data-directory-pagination data-directory-target="buyers-directory-grid" aria-label="Registered buyers" data-i18n-aria-label="buyers.results.title"{% if not buyers %} hidden{% endif %}>
+            <button type="button" data-directory-previous data-i18n="marketPrices.previous" disabled>Previous</button>
+            <div class="sf-directory-page-numbers" data-directory-page-numbers></div>
+            <button type="button" data-directory-next data-i18n="marketPrices.next" disabled>Next</button>
+            <span class="sf-directory-page-of" data-directory-page-of aria-live="polite">Page 1 of 1</span>
+        </nav>
+    </section>
+</main>
+
+{% include "partials/public_footer.html" %}
+<script src="/frontend/js/i18n.js?v=directory-pages-1"></script>
+<script src="/frontend/js/main.js"></script>
+<script src="/frontend/js/public-directories.js?v=1"></script>
+</body>
+</html>

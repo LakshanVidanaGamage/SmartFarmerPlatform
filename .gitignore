@@ -1,0 +1,85 @@
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!.env.example
+
+.venv/
+venv/
+
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Local database backups and exports; keep the source schema.sql tracked.
+backups/
+**/backups/
+*.sql.bak
+*.sql.gz
+*-backup.sql
+*_backup.sql
+*.backup.sql
+*.sql.backup
+*.dump
+*.backup
+*.bak
+*.sqlite3
+*.db
+
+# Local private keys and secret files.
+*.secret
+*.secrets
+*.credential
+*.credentials
+*.token
+secrets/
+**/secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+
+
+# Additional Python virtual environments
+.venv-connector-test/
+.venv-viva-test/
+.venv-test/
+
+# Node dependencies
+node_modules/
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Local MySQL data directories
+mysql-phase4c-data/
+mysql-phase4c-data-active/
+mysql-phase4c-data-final/
+
+# MySQL backup and dump files
+mysql-phase4c-backup*
+mysql-phase4c-dump*
+mysql-phase4c-error*
+mysql-phase4c-final-er*
+
+# Test and coverage cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Local development settings
+.vscode/
+
+# Internal QA and investigation reports
+*REPORT*
+*INVESTIGATION*
+*RESTORATION*
+
+backend/convert_farmer_to_admin.py

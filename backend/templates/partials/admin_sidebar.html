@@ -1,0 +1,51 @@
+{% macro admin_nav_icon(name) -%}
+<span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+{%- if name == 'overview' -%}<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+{%- elif name == 'farmers' -%}<path d="M12 21v-8m0 2C7 15 5 12 5 7c5 0 8 3 8 8m-1-3c1-5 4-8 8-8 0 5-3 9-8 10M5 21h14"/>
+{%- elif name == 'buyers' -%}<circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1m2-14a3 3 0 0 1 0 6m1 3a5 5 0 0 1 3 5"/>
+{%- elif name == 'produce' -%}<path d="M12 21v-9m0 4C7 16 4 13 4 8c5 0 9 3 9 8m-1-4c1-5 4-8 9-8 0 5-3 9-9 10M5 21h14"/>
+{%- elif name == 'prices' -%}<path d="M3 19h18M5 16l5-5 3 3 6-7m-4 0h4v4"/>
+{%- elif name == 'offers' -%}<path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/>
+{%- elif name == 'orders' -%}<path d="m4 7 8-4 8 4v10l-8 4-8-4V7Zm0 0 8 4 8-4m-8 4v10"/>
+{%- elif name == 'categories' -%}<path d="M3 4h7l11 8-8 8L2 9V5a1 1 0 0 1 1-1Z"/><circle cx="7" cy="8" r="1"/>
+{%- elif name == 'profile' -%}<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
+{%- elif name == 'logout' -%}<path d="M10 17l5-5-5-5m5 5H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
+{%- endif -%}</svg></span>
+{%- endmacro %}
+<div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+<aside class="admin-sidebar" id="admin-sidebar" aria-label="Admin navigation" data-i18n-aria-label="admin.nav.aria">
+    <a class="admin-brand" href="{{ url_for('dashboard') }}">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 39V21M24 26C12 26 8 18 9 9c10-1 18 4 18 14M24 21c0-10 7-15 16-15 1 10-4 17-16 18M17 39h14"/></svg></span>
+        <span><strong>Smart Farmer</strong><small data-i18n="admin.brand">ADMIN WORKSPACE</small></span>
+    </a>
+    <p class="sidebar-label" data-i18n="admin.nav.group">Workspace</p>
+    <nav class="admin-nav" aria-label="Admin dashboard sections" data-i18n-aria-label="admin.nav.aria">
+        {% if admin_sidebar_profile|default(false) %}
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#overview">{{ admin_nav_icon('overview') }}<span data-i18n="admin.nav.overview">Overview</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#farmers">{{ admin_nav_icon('farmers') }}<span data-i18n="admin.nav.farmers">Farmers</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#buyers">{{ admin_nav_icon('buyers') }}<span data-i18n="admin.nav.buyers">Buyers</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#produce">{{ admin_nav_icon('produce') }}<span data-i18n="admin.nav.produce">Produce</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#prices">{{ admin_nav_icon('prices') }}<span data-i18n="admin.nav.prices">Market Prices</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#offers">{{ admin_nav_icon('offers') }}<span data-i18n="admin.nav.offers">Offers</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#orders">{{ admin_nav_icon('orders') }}<span data-i18n="admin.nav.orders">Orders</span></a>
+        <a class="admin-nav-link" href="{{ url_for('dashboard') }}#categories">{{ admin_nav_icon('categories') }}<span data-i18n="admin.nav.categories">Categories</span></a>
+        {% else %}
+        <button type="button" class="admin-nav-link is-active" data-section-link="overview" aria-current="page">{{ admin_nav_icon('overview') }}<span data-i18n="admin.nav.overview">Overview</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="farmers">{{ admin_nav_icon('farmers') }}<span data-i18n="admin.nav.farmers">Farmers</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="buyers">{{ admin_nav_icon('buyers') }}<span data-i18n="admin.nav.buyers">Buyers</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="produce">{{ admin_nav_icon('produce') }}<span data-i18n="admin.nav.produce">Produce</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="prices">{{ admin_nav_icon('prices') }}<span data-i18n="admin.nav.prices">Market Prices</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="offers">{{ admin_nav_icon('offers') }}<span data-i18n="admin.nav.offers">Offers</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="orders">{{ admin_nav_icon('orders') }}<span data-i18n="admin.nav.orders">Orders</span></button>
+        <button type="button" class="admin-nav-link" data-section-link="categories">{{ admin_nav_icon('categories') }}<span data-i18n="admin.nav.categories">Categories</span></button>
+        {% endif %}
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-help"><span aria-hidden="true">✦</span><div><strong data-i18n="admin.sidebar.care">Platform care</strong><small data-i18n="admin.sidebar.careNote">Manage with confidence</small></div></div>
+        <a class="admin-nav-link{% if admin_sidebar_profile|default(false) %} is-active{% endif %}" href="{{ url_for('profile.profile_page') }}"{% if admin_sidebar_profile|default(false) %} aria-current="page"{% endif %}>{{ admin_nav_icon('profile') }}<span data-i18n="admin.nav.profile">My Profile</span></a>
+        <form method="post" action="{{ url_for('logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}">
+            <button type="submit" class="sidebar-logout">{{ admin_nav_icon('logout') }}<span data-i18n="admin.nav.logout">Log out</span></button>
+        </form>
+    </div>
+</aside>

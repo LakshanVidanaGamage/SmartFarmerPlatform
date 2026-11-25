@@ -1,0 +1,751 @@
+.sf-prices-section {
+    --market-card-surface: var(--sf-surface);
+    --market-card-photo-background: var(--sf-surface-soft);
+    --market-card-line: var(--sf-line);
+    --market-card-text: var(--sf-ink);
+    --market-card-price: var(--sf-green-deep);
+    --market-card-muted: var(--sf-muted);
+}
+
+/* Homepage-only CTA styling keeps these links distinct from shared cards. */
+.sf-home .sf-prices-intro .sf-market-price-actions {
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0;
+}
+
+.sf-home .sf-home-cta {
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid var(--sf-green);
+    border-radius: 999px;
+    background: var(--sf-green);
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    opacity: 1;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.sf-home .sf-prices-section .sf-market-price-toggle.sf-home-cta {
+    background: var(--sf-green);
+    color: #fff !important;
+}
+
+.sf-home .sf-home-cta:hover {
+    transform: translateY(-2px);
+    border-color: var(--sf-green-deep);
+    background: var(--sf-green-deep);
+    color: #fff !important;
+    box-shadow: 0 5px 14px rgba(23, 107, 58, .16);
+}
+
+.sf-home .sf-home-cta:focus-visible {
+    outline: 3px solid rgba(68, 145, 84, .38);
+    outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+    .sf-home .sf-home-cta {
+        min-height: 42px;
+        padding-inline: 16px;
+        font-size: 12px;
+    }
+}
+
+.fd-prices-panel {
+    --market-card-surface: var(--fd-surface);
+    --market-card-photo-background: var(--fd-surface-soft);
+    --market-card-line: var(--fd-line);
+    --market-card-text: var(--fd-forest);
+    --market-card-price: var(--fd-green-strong);
+    --market-card-muted: var(--fd-muted);
+}
+
+.bd-prices-panel {
+    --market-card-surface: var(--bd-surface);
+    --market-card-photo-background: var(--bd-surface-soft);
+    --market-card-line: var(--bd-line);
+    --market-card-text: var(--bd-forest);
+    --market-card-price: var(--bd-green-strong);
+    --market-card-muted: var(--bd-muted);
+}
+
+.admin-section[data-panel="prices"] {
+    --market-card-surface: var(--surface);
+    --market-card-photo-background: var(--bg);
+    --market-card-line: var(--border);
+    --market-card-text: var(--text);
+    --market-card-price: var(--primary);
+    --market-card-muted: var(--text-secondary);
+}
+
+.sf-market-price-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+.sf-market-price-grid > [hidden] {
+    display: none !important;
+}
+
+.sf-market-price-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.sf-market-price-toggle {
+    padding: .55rem 1.05rem;
+    border: 1px solid var(--market-card-line);
+    border-radius: 999px;
+    background: var(--market-card-surface);
+    color: var(--market-card-price);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sf-market-price-toggle:hover {
+    border-color: var(--market-card-price);
+}
+
+.sf-market-price-actions[hidden],
+.sf-market-price-toggle[hidden] {
+    display: none !important;
+}
+
+.sf-market-price-toggle[aria-expanded="true"] {
+    background: var(--market-card-photo-background);
+}
+
+.sf-market-price-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--market-card-line);
+    border-radius: 12px;
+    background: var(--market-card-surface);
+    color: var(--market-card-text);
+    overflow-wrap: anywhere;
+}
+
+.sf-market-price-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--market-card-photo-background);
+}
+
+.sf-market-price-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sf-market-price-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    padding: .9rem 1rem 1rem;
+}
+
+.sf-market-price-body h3 {
+    margin: 0;
+    color: var(--market-card-text);
+    font-size: 1.125rem;
+    line-height: 1.3;
+}
+
+.sf-market-price-amount {
+    margin: 0;
+    color: var(--market-card-price);
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.sf-market-price-amount span {
+    color: var(--market-card-muted);
+    font-size: .875rem;
+}
+
+.sf-market-price-details {
+    display: grid;
+    gap: .5rem;
+    margin: auto 0 0;
+    padding-top: .65rem;
+    border-top: 1px solid var(--market-card-line);
+    font-size: .875rem;
+    line-height: 1.45;
+}
+
+.sf-market-price-details > div {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: .5rem;
+}
+
+.sf-market-price-details dt,
+.sf-market-price-details dd span {
+    color: var(--market-card-muted);
+}
+
+.sf-market-price-details dd {
+    margin: 0;
+    text-align: end;
+}
+
+.sf-market-price-details dd span {
+    display: block;
+}
+
+.sf-market-price-sort,
+.sf-market-price-sort-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem .9rem;
+}
+
+.sf-market-price-sort {
+    margin-block: 1rem;
+    color: var(--market-card-muted);
+}
+
+.sf-market-price-sort .sort-button[aria-pressed="true"] {
+    color: var(--market-card-price);
+}
+
+.sf-market-price-card .table-actions {
+    flex-wrap: wrap;
+    margin-top: .5rem;
+}
+
+@media (max-width: 1023px) {
+    .sf-market-price-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .625rem;
+    }
+}
+
+@media (max-width: 599px) {
+    .sf-market-price-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .5rem;
+    }
+}
+
+.admin-section[data-panel="prices"] > .pagination {
+    margin-top: 1rem;
+}
+
+.sf-market-price-pagination {
+    display: grid;
+    min-height: 56px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+}
+
+.sf-market-price-pagination > span {
+    grid-column: 2;
+    color: var(--market-card-muted);
+    font-size: .875rem;
+    text-align: center;
+}
+
+.sf-market-price-pagination > button {
+    min-height: 40px;
+    padding: 9px 17px;
+    border: 1px solid var(--market-card-line);
+    border-radius: 12px;
+    background: var(--market-card-surface);
+    color: var(--market-card-price);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.sf-market-price-pagination > button:first-child {
+    grid-column: 1;
+    justify-self: start;
+}
+
+.sf-market-price-pagination > button:last-child {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.sf-market-price-pagination > button:hover:not(:disabled) {
+    border-color: var(--market-card-price);
+    background: var(--market-card-price);
+    color: var(--market-card-surface);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--market-card-price) 18%, transparent);
+    transform: translateY(-1px);
+}
+
+.sf-market-price-pagination > button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--market-card-price) 32%, transparent);
+    outline-offset: 2px;
+}
+
+.sf-market-price-pagination > button:disabled {
+    border-color: var(--market-card-line);
+    background: var(--market-card-photo-background);
+    color: var(--market-card-muted);
+    cursor: not-allowed;
+    opacity: .58;
+}
+
+.sf-market-price-pagination:empty {
+    display: none;
+}
+
+@media (max-width: 599px) {
+    .sf-market-price-pagination {
+        min-height: 52px;
+        gap: 6px;
+        padding: 8px 4px;
+    }
+
+    .sf-market-price-pagination > button {
+        min-height: 38px;
+        padding: 8px 11px;
+        border-radius: 10px;
+        font-size: .8125rem;
+    }
+
+    .sf-market-price-pagination > span {
+        font-size: .8125rem;
+    }
+}
+
+.sf-prices-section .sf-prices-layout {
+    gap: 1.25rem;
+    padding-block: clamp(1.25rem, 2vw, 2rem);
+}
+
+.sf-prices-section .sf-market-price-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.sf-prices-section .sf-market-price-media {
+    max-height: 112px;
+}
+
+.sf-prices-section .sf-market-price-body {
+    gap: .2rem;
+    padding: .55rem .6rem .6rem;
+}
+
+.sf-prices-section .sf-market-price-body h3 {
+    font-size: clamp(.75rem, .85vw, .9rem);
+}
+
+.sf-prices-section .sf-market-price-amount {
+    font-size: clamp(.78rem, .9vw, .94rem);
+}
+
+.sf-prices-section .sf-market-price-details {
+    gap: .3rem;
+    padding-top: .4rem;
+    font-size: .7rem;
+}
+
+.sf-prices-section .sf-market-price-grid + .sf-market-price-actions {
+    margin-top: .65rem;
+}
+
+@media (max-width: 1023px) {
+    .sf-prices-section .sf-market-price-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 599px) {
+    .sf-prices-section .sf-market-price-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sf-prices-section .sf-market-price-media {
+        max-height: 82px;
+    }
+
+    .sf-prices-section .sf-market-price-body {
+        padding: .45rem .5rem .55rem;
+    }
+
+    .sf-prices-section .sf-market-price-body h3,
+    .sf-prices-section .sf-market-price-amount {
+        font-size: .78rem;
+    }
+
+    .sf-prices-section .sf-market-price-details > div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .1rem;
+    }
+}
+
+/* Public Market Prices page card layout. Scoped to this page to keep dashboard cards unchanged. */
+.sf-public-market-prices {
+    --market-card-surface: var(--sf-surface, #fff);
+    --market-card-photo-background: var(--sf-surface-soft, #eef4ec);
+    --market-card-line: var(--sf-line, #e0e8df);
+    --market-card-text: var(--sf-ink, #1d3025);
+    --market-card-price: var(--sf-green-deep, #1e6344);
+    --market-card-muted: var(--sf-muted, #6d7c72);
+}
+
+.sf-public-market-prices .sf-market-price-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: stretch;
+    gap: .8rem;
+}
+
+.sf-public-market-prices .sf-public-price-grid:not(.sf-public-price-ready) > :nth-child(n+13) {
+    display: none;
+}
+
+.sf-public-market-prices .sf-market-price-card {
+    border-color: var(--market-card-line);
+    border-radius: 18px;
+    background: var(--market-card-surface);
+    box-shadow: 0 8px 24px rgba(26, 63, 43, .08);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.sf-public-market-prices .sf-market-price-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--market-card-price) 30%, var(--market-card-line));
+    box-shadow: 0 14px 32px rgba(26, 63, 43, .14);
+}
+
+.sf-public-market-prices .sf-market-price-media {
+    aspect-ratio: 4 / 3;
+}
+
+.sf-public-market-prices .sf-market-price-body {
+    gap: .35rem;
+    padding: .7rem .75rem .8rem;
+}
+
+.sf-public-market-prices .sf-market-price-body h3 {
+    font-size: .95rem;
+    line-height: 1.35;
+}
+
+.sf-public-market-prices .sf-market-price-amount {
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.sf-public-market-prices .sf-market-price-details {
+    gap: .4rem;
+    padding-top: .5rem;
+    font-size: .76rem;
+}
+
+.sf-public-market-prices .sf-market-price-details > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .1rem;
+}
+
+.sf-public-market-prices .sf-market-price-details dt,
+.sf-public-market-prices .sf-market-price-details dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: start;
+}
+
+.sf-public-market-prices .sf-public-price-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: .35rem;
+    margin: 1.2rem 0 1rem;
+}
+
+.sf-public-market-prices .sf-public-price-toolbar label {
+    grid-column: 1 / -1;
+    color: var(--sf-ink);
+    font-weight: 700;
+}
+
+.sf-public-market-prices .sf-public-price-form {
+    display: flex;
+    align-items: stretch;
+    gap: .75rem;
+    min-width: 0;
+}
+
+.sf-public-market-prices .sf-public-price-search {
+    display: flex;
+    align-items: center;
+    flex: 0 1 68%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 .85rem;
+    border: 1px solid var(--sf-line);
+    border-radius: 14px;
+    background: var(--sf-surface, #fff);
+    box-shadow: 0 4px 18px rgba(26, 63, 43, .07);
+    color: var(--sf-green-deep);
+}
+
+.sf-public-market-prices .sf-public-price-search:focus-within {
+    border-color: var(--sf-green);
+    outline: 3px solid color-mix(in srgb, var(--sf-green) 18%, transparent);
+}
+
+.sf-public-market-prices .sf-public-price-search svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+}
+
+.sf-public-market-prices .sf-public-price-search input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: .7rem;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--sf-ink);
+    font: inherit;
+}
+
+.sf-public-market-prices .sf-public-price-search button {
+    flex: none;
+    padding: .35rem .55rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--sf-surface-soft);
+    color: var(--sf-green-deep);
+    font: inherit;
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sf-public-market-prices .sf-public-price-search button:hover {
+    background: var(--sf-green);
+    color: #fff;
+}
+
+.sf-public-market-prices .sf-public-price-submit {
+    flex: none;
+    min-width: 112px;
+    min-height: 48px;
+    padding: .7rem 1.35rem;
+    border: 1px solid var(--sf-green-deep);
+    border-radius: 14px;
+    background: var(--sf-green-deep);
+    box-shadow: 0 4px 14px rgba(26, 63, 43, .13);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.sf-public-market-prices .sf-public-price-submit:hover {
+    background: var(--sf-green);
+    box-shadow: 0 7px 18px rgba(26, 63, 43, .18);
+    transform: translateY(-1px);
+}
+
+.sf-public-market-prices .sf-public-price-search button[hidden],
+.sf-public-market-prices .sf-prices-empty[hidden] {
+    display: none;
+}
+
+.sf-public-market-prices .sf-public-price-count {
+    margin: 0;
+    color: var(--sf-muted);
+    font-size: .9rem;
+    text-align: start;
+}
+
+.sf-public-market-prices .sf-public-price-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    margin-top: 1.2rem;
+}
+
+.sf-public-market-prices .sf-public-price-pages {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .35rem;
+}
+
+.sf-public-market-prices .sf-public-price-pagination button {
+    min-width: 40px;
+    min-height: 40px;
+    padding: .45rem .8rem;
+    border: 1px solid var(--sf-line);
+    border-radius: 10px;
+    background: var(--sf-surface, #fff);
+    color: var(--sf-green-deep);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.sf-public-market-prices .sf-public-price-pagination button:hover:not(:disabled) {
+    background: var(--sf-green-deep);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.sf-public-market-prices .sf-public-price-search button:focus-visible,
+.sf-public-market-prices .sf-public-price-submit:focus-visible,
+.sf-public-market-prices .sf-public-price-pagination button:focus-visible {
+    outline: 3px solid var(--sf-green);
+    outline-offset: 2px;
+}
+
+.sf-public-market-prices .sf-public-price-pagination button[aria-current="page"] {
+    background: var(--sf-green-deep);
+    color: #fff;
+}
+
+.sf-public-market-prices .sf-public-price-pagination button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.sf-public-market-prices .sf-public-price-page-of {
+    flex-basis: 100%;
+    color: var(--sf-muted);
+    font-size: .875rem;
+    text-align: center;
+}
+
+@media (max-width: 1180px) {
+    .sf-public-market-prices .sf-market-price-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .sf-public-market-prices .sf-market-price-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sf-public-market-prices .sf-market-price-body {
+        padding: .65rem .7rem .75rem;
+    }
+
+    .sf-public-market-prices .sf-public-price-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sf-public-market-prices .sf-public-price-form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sf-public-market-prices .sf-public-price-search {
+        width: 100%;
+    }
+
+    .sf-public-market-prices .sf-public-price-submit {
+        width: 100%;
+    }
+
+    .sf-public-market-prices .sf-public-price-count {
+        text-align: start;
+    }
+}
+
+@media (max-width: 420px) {
+    .sf-public-market-prices .sf-market-price-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sf-public-market-prices .sf-market-price-card {
+        transition: none;
+    }
+
+    .sf-public-market-prices .sf-market-price-card:hover {
+        transform: none;
+    }
+}
+
+.sf-prices-section .sf-market-price-media {
+    max-height: 112px;
+}
+
+.sf-prices-section .sf-market-price-body {
+    gap: .2rem;
+    padding: .55rem .6rem .6rem;
+}
+
+.sf-prices-section .sf-market-price-body h3 {
+    font-size: clamp(.75rem, .85vw, .9rem);
+}
+
+.sf-prices-section .sf-market-price-amount {
+    font-size: clamp(.78rem, .9vw, .94rem);
+}
+
+.sf-prices-section .sf-market-price-details {
+    gap: .3rem;
+    padding-top: .4rem;
+    font-size: .7rem;
+}
+
+.sf-prices-section .sf-market-price-grid + .sf-market-price-actions {
+    margin-top: .65rem;
+}
+
+@media (max-width: 1023px) {
+    .sf-prices-section .sf-market-price-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 599px) {
+    .sf-prices-section .sf-market-price-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sf-prices-section .sf-market-price-media {
+        max-height: 82px;
+    }
+
+    .sf-prices-section .sf-market-price-body {
+        padding: .45rem .5rem .55rem;
+    }
+
+    .sf-prices-section .sf-market-price-body h3,
+    .sf-prices-section .sf-market-price-amount {
+        font-size: .78rem;
+    }
+
+    .sf-prices-section .sf-market-price-details > div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .1rem;
+    }
+}

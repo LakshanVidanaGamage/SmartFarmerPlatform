@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html lang="{{ session.get('language', 'en') }}">
+{% from "partials/back_button.html" import back_button %}
+{% from "partials/market_price_card.html" import market_price_card %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f9f5">
+    <meta name="csrf-token" content="{{ session.get('auth_csrf_token', '')|e }}">
+    <title data-i18n="farmer.documentTitle">Farmer dashboard | Smart Farmer</title>
+    <script>
+        try {
+            const savedTheme = localStorage.getItem("sf-theme");
+            document.documentElement.setAttribute("data-theme", savedTheme === "dark" ? "dark" : "light");
+        } catch (error) {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/farmer_dashboard.css') }}?v=market-price-cards-1">
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/back-button.css') }}">
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/market-prices.css') }}?v=1">
+    {% if page_view in ['offers', 'orders'] %}<link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/offers-orders-table.css') }}">{% endif %}
+    {% if page_view|default('dashboard') == 'dashboard' %}<link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/overview-pagination.css') }}">{% endif %}
+    <link rel="stylesheet" href="{{ url_for('frontend_files', filename='css/agricultural-page-background.css') }}?v=4">
+    <script src="{{ url_for('frontend_files', filename='js/i18n.js') }}?v=market-price-cards-1" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/main.js') }}" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/produce-images.js') }}?v=market-price-cards-1" defer></script>
+    <script src="{{ url_for('frontend_files', filename='js/market-price-pagination.js') }}?v=1" defer></script>
+    {% if page_view in ['offers', 'orders'] %}<script src="{{ url_for('frontend_files', filename='js/offers-orders-table.js') }}" defer></script>{% endif %}
+    {% if page_view|default('dashboard') == 'dashboard' %}<script src="{{ url_for('frontend_files', filename='js/overview-pagination.js') }}" defer></script>{% endif %}
+    <script src="{{ url_for('static', filename='js/farmer_dashboard.js') }}?v=produce-category-library-20261115-5" defer></script>
+</head>
+<body class="sf-farmer-dashboard" data-page-view="{{ page_view|default('dashboard') }}">
+    <a class="fd-skip-link" href="#dashboard" data-i18n="farmer.skip">Skip to dashboard content</a>
+    <div class="fd-shell">
+        <aside class="fd-sidebar" id="farmerSidebar" aria-label="Farmer dashboard navigation" data-i18n-aria-label="farmer.nav.aria">
+            <a class="fd-brand" href="{{ '#dashboard' if page_view|default('dashboard') == 'dashboard' else url_for('farmer_dashboard') }}" aria-label="Smart Farmer dashboard" data-i18n-aria-label="farmer.nav.overview">
+                <span class="fd-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21"></path><path d="M24 26C12 26 8 18 9 9c10-1 18 4 18 14"></path><path d="M24 21c0-10 7-15 16-15 1 10-4 17-16 18"></path><path d="M17 39h14"></path></svg>
+                </span>
+                <span class="fd-brand-copy"><strong>Smart Farmer</strong><small data-i18n="farmer.header.role">Farmer account</small></span>
+            </a>
+
+            <button class="fd-nav-toggle" type="button" data-farmer-nav-toggle aria-controls="farmerNav" aria-expanded="false" aria-label="Open dashboard navigation" data-i18n-aria-label="farmer.nav.open">
+                <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            </button>
+
+            <div class="fd-nav-panel" data-farmer-nav>
+                <p class="fd-nav-label" data-i18n="farmer.nav.group">Workspace</p>
+                <nav class="fd-nav-links" aria-label="Dashboard sections" data-i18n-aria-label="farmer.nav.sections">
+                    <a class="fd-nav-link{% if page_view == 'dashboard' %} is-active{% endif %}" href="{{ '#dashboard' if page_view == 'dashboard' else url_for('farmer_dashboard') }}"{% if page_view == 'dashboard' %} aria-current="page"{% endif %} data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="5" rx="2"></rect><rect x="13" y="10" width="8" height="11" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect></svg>
+                        <span data-i18n="farmer.nav.overview">Overview</span>
+                    </a>
+                    <a class="fd-nav-link" href="{{ '#add-produce' if page_view == 'dashboard' else url_for('farmer_dashboard') ~ '#add-produce' }}" data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+                        <span data-i18n="farmer.nav.add">Add produce</span>
+                    </a>
+                    <a class="fd-nav-link{% if page_view == 'produce' %} is-active{% endif %}" href="{{ url_for('farmer_produce_page') }}"{% if page_view == 'produce' %} aria-current="page"{% endif %} data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-5 0-8-3-8-8 5 0 8 3 8 8Z"></path><path d="M12 20c0-6 3-11 9-13 1 7-3 12-9 13ZM12 20V9"></path></svg>
+                        <span data-i18n="farmer.nav.produce">My produce</span><span class="fd-nav-badge" id="produceNavCount">0</span>
+                    </a>
+                    <a class="fd-nav-link{% if page_view == 'offers' %} is-active{% endif %}" href="{{ url_for('farmer_offers_page') }}"{% if page_view == 'offers' %} aria-current="page"{% endif %} data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg>
+                        <span data-i18n="farmer.nav.offers">Received offers</span><span class="fd-nav-badge" id="offersNavCount">0</span>
+                    </a>
+                    <a class="fd-nav-link{% if page_view == 'orders' %} is-active{% endif %}" href="{{ url_for('farmer_orders_page') }}"{% if page_view == 'orders' %} aria-current="page"{% endif %} data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg>
+                        <span data-i18n="farmer.nav.orders">My orders</span><span class="fd-nav-badge" id="ordersNavCount">0</span>
+                    </a>
+                    <a class="fd-nav-link" href="{{ '#market-prices' if page_view == 'dashboard' else url_for('farmer_dashboard') ~ '#market-prices' }}" data-dashboard-link>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M8 15l4-5 3 2 5-7"></path></svg>
+                        <span data-i18n="admin.nav.prices">Market Prices</span>
+                    </a>
+                </nav>
+
+                <div class="fd-account-nav">
+                    <p class="fd-nav-label" data-i18n="farmer.nav.account">Account</p>
+                    <a class="fd-nav-link" href="{{ url_for('profile.profile_page') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                        <span data-i18n="farmer.nav.profile">My profile</span>
+                    </a>
+                    <form method="post" action="{{ url_for('logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}">
+                    <button type="submit" class="fd-nav-link fd-logout-link" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"></path><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path></svg>
+                        <span data-i18n="farmer.nav.logout">Log out</span>
+                    </button>
+                    </form>
+                </div>
+            </div>
+            <p class="fd-sidebar-footnote" data-i18n="farmer.footer">Smart Farmer connects local growers with buyers across Sri Lanka.</p>
+        </aside>
+
+        <div class="fd-main-column">
+            <header class="fd-topbar" data-site-header>
+                <div class="fd-topbar-heading">
+                    <p data-i18n="farmer.header.workspace">Farmer workspace</p>
+                    {% if page_view == 'produce' %}<h1 data-i18n="farmer.produce.title">My produce</h1>
+                    {% elif page_view == 'offers' %}<h1 data-i18n="farmer.offers.title">Received offers</h1>
+                    {% elif page_view == 'orders' %}<h1 data-i18n="farmer.orders.title">My orders</h1>
+                    {% else %}<h1 data-i18n="farmer.nav.overview">Overview</h1>{% endif %}
+                </div>
+                <div class="fd-topbar-actions" data-header-actions>
+                    {% if page_view != 'dashboard' %}{{ back_button(url_for('farmer_dashboard')) }}{% endif %}
+                    <label class="fd-sr-only" for="languageSelect" data-i18n="farmer.language">Language</label>
+                    <select id="languageSelect" class="fd-language-select" aria-label="Language">
+                        <option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>English</option>
+                        <option value="si" {% if session.get('language') == 'si' %}selected{% endif %}>සිංහල</option>
+                        <option value="ta" {% if session.get('language') == 'ta' %}selected{% endif %}>தமிழ்</option>
+                    </select>
+                    <button class="fd-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                    <a class="fd-user-chip" href="{{ url_for('profile.profile_page') }}">
+                        <span class="fd-user-avatar" aria-hidden="true">{{ farmer_name[:1]|upper }}</span>
+                        <span><strong>{{ farmer_name }}</strong><small data-i18n="farmer.header.role">Farmer account</small></span>
+                    </a>
+                </div>
+            </header>
+
+            <main class="fd-content" id="dashboard">
+                <section class="fd-welcome-panel" aria-labelledby="welcome-title">
+                    <div class="fd-welcome-copy">
+                        <p class="fd-eyebrow"><span class="fd-eyebrow-dot" aria-hidden="true"></span><span data-i18n="farmer.welcome.eyebrow">Your farm, your marketplace</span></p>
+                        <h2 id="welcome-title" data-i18n="farmer.welcome.title" data-i18n-param-name="{{ farmer_name|e }}">Welcome back, {{ farmer_name }}!</h2>
+                        <p data-i18n="farmer.welcome.copy">Manage your harvest, respond to buyers, and keep every order moving.</p>
+                    </div>
+                    <div class="fd-welcome-photo" aria-hidden="true">
+                        <img src="{{ url_for('frontend_files', filename='images/public-marketplace-hero.jpg') }}" alt="" fetchpriority="high">
+                    </div>
+                </section>
+
+                <section class="fd-stat-grid" aria-label="Farmer dashboard statistics" data-i18n-aria-label="farmer.stats.aria">
+                    <article class="fd-stat-card">
+                        <span class="fd-stat-icon fd-icon-total" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4C10 4 5 8 5 15c0 3 2 5 5 5 7 0 11-6 10-16Z"></path><path d="M4 21c2-5 6-8 12-11"></path></svg></span>
+                        <div><p data-i18n="farmer.nav.produce">My produce</p><strong id="totalProduceCount">0</strong></div>
+                        <span class="fd-stat-caption" id="produceTotalBadge">0 listings</span>
+                    </article>
+                    <article class="fd-stat-card">
+                        <span class="fd-stat-icon fd-icon-available" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20V9M12 14C6 14 4 10 4 5c5 0 9 3 9 8M12 12c1-5 4-8 9-8 0 5-3 9-9 10"></path></svg></span>
+                        <div><p data-i18n="farmer.stats.produce">Available listings</p><strong id="produceCount">0</strong></div>
+                        <span class="fd-stat-caption" id="produceBadge">0 listings</span>
+                    </article>
+                    <article class="fd-stat-card">
+                        <span class="fd-stat-icon fd-icon-offer" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg></span>
+                        <div><p data-i18n="farmer.stats.offers">Received offers</p><strong id="offerCount">0</strong></div>
+                        <span class="fd-stat-caption" id="offerBadge">0 offers</span>
+                    </article>
+                    <article class="fd-stat-card">
+                        <span class="fd-stat-icon fd-icon-order" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg></span>
+                        <div><p data-i18n="farmer.stats.orders">Orders to manage</p><strong id="orderCount">0</strong></div>
+                        <span class="fd-stat-caption" id="orderBadge">0 orders</span>
+                    </article>
+                </section>
+
+                <section class="fd-panel fd-prices-panel" id="market-prices" aria-labelledby="market-prices-title">
+                    <div class="fd-section-heading fd-section-heading-inline">
+                        <div><p class="fd-eyebrow" data-i18n="buyer.prices.eyebrow">Local market reference</p><h2 id="market-prices-title" data-i18n="buyer.prices.title">Latest market prices</h2><p data-i18n="buyer.prices.description">Recent prices help you compare local market information.</p></div>
+                        <span class="fd-count" data-i18n="marketPrices.pageOf" data-i18n-param-page="{{ market_prices_page.page }}" data-i18n-param-pages="{{ market_prices_page.pages }}">Page {{ market_prices_page.page }} of {{ market_prices_page.pages }}</span>
+                    </div>
+                    {% if market_prices %}
+                    <div class="sf-market-price-grid" id="farmer-market-prices">
+                        {% for price in market_prices %}
+                        {% set loop_index = loop.index %}
+                        {{ market_price_card(price, 'LKR %.2f'|format(price.price_per_kg)) }}
+                        {% endfor %}
+                    </div>
+                    <div class="sf-market-price-pagination" data-market-price-pagination="farmer" data-page="{{ market_prices_page.page }}" data-pages="{{ market_prices_page.pages }}" data-per-page="6" data-i18n-page-prefix="marketPrices.pageOf" aria-live="polite"></div>
+                    {% else %}
+                    <div class="fd-empty-state fd-empty-compact"><h3 data-i18n="buyer.prices.empty">No market prices are available yet.</h3></div>
+                    {% endif %}
+                </section>
+                <section class="fd-panel fd-add-panel" id="add-produce" aria-labelledby="add-produce-title">
+                    <div class="fd-section-heading">
+                        <div><p class="fd-eyebrow" data-i18n="farmer.form.eyebrow">Share your harvest</p><h2 id="add-produce-title" data-i18n="farmer.form.title">Add new produce</h2><p data-i18n="farmer.form.copy">Give buyers the details they need to find and order your produce.</p></div>
+                    </div>
+                    <div id="formMessage" class="fd-message" role="status" aria-live="polite"></div>
+                    <form id="produceForm" class="fd-form-grid" novalidate>
+                        <div class="fd-field"><label for="produce_name" data-i18n="farmer.field.produce">Produce name</label><input id="produce_name" name="produce_name" type="text" placeholder="For example, carrots" data-i18n-placeholder="farmer.placeholder.produce" required></div>
+                        <div class="fd-field"><label for="quantity" data-i18n="farmer.field.quantity">Available quantity</label><input id="quantity" name="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="For example, 100" data-i18n-placeholder="farmer.placeholder.quantity" required></div>
+                        <div class="fd-field"><label for="unit" data-i18n="farmer.field.unit">Unit</label><select id="unit" name="unit" required><option value="kg" data-i18n="farmer.unit.kg">Kilograms (kg)</option><option value="g" data-i18n="farmer.unit.g">Grams (g)</option><option value="pieces" data-i18n="farmer.unit.pieces">Pieces</option><option value="bundles" data-i18n="farmer.unit.bundles">Bundles</option></select></div>
+                        <div class="fd-field"><label for="price_per_unit" data-i18n="farmer.field.price">Price per unit (LKR)</label><input id="price_per_unit" name="price_per_unit" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="For example, 250" data-i18n-placeholder="farmer.placeholder.price" required></div>
+                        <div class="fd-field"><label for="district" data-i18n="farmer.field.district">District</label><select id="district" name="district" required><option value="" data-i18n="farmer.district.select">Select a district</option>
+                            <option value="Ampara" data-i18n="farmer.district.ampara">Ampara</option><option value="Anuradhapura" data-i18n="farmer.district.anuradhapura">Anuradhapura</option><option value="Badulla" data-i18n="farmer.district.badulla">Badulla</option><option value="Batticaloa" data-i18n="farmer.district.batticaloa">Batticaloa</option><option value="Colombo" data-i18n="farmer.district.colombo">Colombo</option><option value="Galle" data-i18n="farmer.district.galle">Galle</option><option value="Gampaha" data-i18n="farmer.district.gampaha">Gampaha</option><option value="Hambantota" data-i18n="farmer.district.hambantota">Hambantota</option><option value="Jaffna" data-i18n="farmer.district.jaffna">Jaffna</option><option value="Kalutara" data-i18n="farmer.district.kalutara">Kalutara</option><option value="Kandy" data-i18n="farmer.district.kandy">Kandy</option><option value="Kegalle" data-i18n="farmer.district.kegalle">Kegalle</option><option value="Kilinochchi" data-i18n="farmer.district.kilinochchi">Kilinochchi</option><option value="Kurunegala" data-i18n="farmer.district.kurunegala">Kurunegala</option><option value="Mannar" data-i18n="farmer.district.mannar">Mannar</option><option value="Matale" data-i18n="farmer.district.matale">Matale</option><option value="Matara" data-i18n="farmer.district.matara">Matara</option><option value="Monaragala" data-i18n="farmer.district.monaragala">Monaragala</option><option value="Mullaitivu" data-i18n="farmer.district.mullaitivu">Mullaitivu</option><option value="Nuwara Eliya" data-i18n="farmer.district.nuwaraEliya">Nuwara Eliya</option><option value="Polonnaruwa" data-i18n="farmer.district.polonnaruwa">Polonnaruwa</option><option value="Puttalam" data-i18n="farmer.district.puttalam">Puttalam</option><option value="Ratnapura" data-i18n="farmer.district.ratnapura">Ratnapura</option><option value="Trincomalee" data-i18n="farmer.district.trincomalee">Trincomalee</option><option value="Vavuniya" data-i18n="farmer.district.vavuniya">Vavuniya</option>
+                        </select></div>
+                        <div class="fd-field fd-field-wide"><label for="description" data-i18n="farmer.field.description">Description (optional)</label><textarea id="description" name="description" rows="3" placeholder="Describe quality, harvest details, or other useful information." data-i18n-placeholder="farmer.placeholder.description"></textarea></div>
+                        <div class="fd-form-actions fd-field-wide"><button type="submit" id="saveButton" class="fd-button fd-button-primary"><span data-i18n="farmer.form.save">Publish produce</span><span class="fd-button-arrow" aria-hidden="true">→</span></button></div>
+                    </form>
+                </section>
+
+                <section class="fd-panel" id="my-produce" aria-labelledby="produce-section-title">
+                    <div class="fd-section-heading fd-section-heading-inline">
+                        <div><p class="fd-eyebrow" id="produceSectionEyebrow" data-i18n="farmer.produce.eyebrow">Your active listings</p><h2 id="produce-section-title" data-i18n="farmer.produce.title">My produce</h2><p data-i18n="farmer.produce.copy">Review your available produce and update its details or stock.</p></div>
+                        <div class="fd-section-heading-actions"><span class="fd-count" id="produceSectionCount">0 listings</span><a class="fd-view-more" href="{{ url_for('farmer_produce_page') }}"><span data-i18n="farmer.viewMore">View more</span><span aria-hidden="true">→</span></a></div>
+                    </div>
+                    <div class="fd-listing-search">
+                        <label class="fd-search-label" for="farmerProduceSearch" data-i18n="farmer.search.produceLabel">Search your produce</label>
+                        <div class="fd-search-control">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"></circle><path d="m15.5 15.5 4.2 4.2"></path></svg>
+                            <input id="farmerProduceSearch" type="search" autocomplete="off" placeholder="Search by produce name" data-i18n-placeholder="farmer.search.producePlaceholder">
+                            <button id="farmerProduceSearchClear" type="button" data-i18n="farmer.search.clear">Clear</button>
+                        </div>
+                    </div>
+                    <div class="fd-produce-category-panel">
+                        <p class="fd-category-filter-label" data-i18n="produce.category.label">Browse by category</p>
+                        <div class="fd-produce-category-filter" id="farmerProduceCategoryFilter" role="group" aria-label="Filter produce by category" data-i18n-aria-label="produce.category.filterLabel"></div>
+                    </div>
+                    <div id="myProduce" class="fd-card-grid" aria-live="polite"><p class="fd-loading" data-i18n="farmer.produce.loading">Loading your produce…</p></div>
+                    {% if page_view|default('dashboard') == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="myProduce" data-card-selector=".fd-data-card" aria-live="polite"></div>{% endif %}
+                </section>
+
+                <section class="fd-panel" id="offers" aria-labelledby="offers-section-title">
+                    <div class="fd-section-heading fd-section-heading-inline">
+                        <div><p class="fd-eyebrow" data-i18n="farmer.offers.eyebrow">Buyer requests</p><h2 id="offers-section-title" data-i18n="farmer.offers.title">Received offers</h2><p data-i18n="farmer.offers.copy">Review each buyer’s offer and accept or reject pending requests.</p></div>
+                        <div class="fd-section-heading-actions"><span class="fd-count" id="offerSectionCount">0 offers</span><a class="fd-view-more" href="{{ url_for('farmer_offers_page') }}"><span data-i18n="farmer.viewMore">View more</span><span aria-hidden="true">→</span></a></div>
+                    </div>
+                    <div id="receivedOffers" class="fd-card-grid fd-record-card-grid" aria-live="polite"><p class="fd-loading" data-i18n="farmer.offers.loading">Loading received offers…</p></div>
+                    {% if page_view|default('dashboard') == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="receivedOffers" data-card-selector=".fd-data-card" aria-live="polite"></div>{% endif %}
+                </section>
+
+                <section class="fd-panel" id="orders" aria-labelledby="orders-section-title">
+                    <div class="fd-section-heading fd-section-heading-inline">
+                        <div><p class="fd-eyebrow" data-i18n="farmer.orders.eyebrow">Fulfilment</p><h2 id="orders-section-title" data-i18n="farmer.orders.title">My orders</h2><p data-i18n="farmer.orders.copy">Confirm, complete, or cancel orders according to their current status.</p></div>
+                        <div class="fd-section-heading-actions"><span class="fd-count" id="orderSectionCount">0 orders</span><a class="fd-view-more" href="{{ url_for('farmer_orders_page') }}"><span data-i18n="farmer.viewMore">View more</span><span aria-hidden="true">→</span></a></div>
+                    </div>
+                    <div id="farmerOrders" class="fd-order-list" aria-live="polite"><p class="fd-loading" data-i18n="farmer.orders.loading">Loading your orders…</p></div>
+                    {% if page_view|default('dashboard') == 'dashboard' %}<div class="sf-overview-pagination" data-overview-pagination="farmerOrders" data-card-selector=".fd-order-card" aria-live="polite"></div>{% endif %}
+                </section>
+
+                <footer class="fd-footer"><span data-i18n="farmer.footer">Smart Farmer connects local growers with buyers across Sri Lanka.</span><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}"><button type="submit" style="border:0;padding:0;background:transparent;color:var(--fd-green-strong);font:inherit;font-weight:700;cursor:pointer" data-i18n="farmer.nav.logout">Log out</button></form></footer>
+            </main>
+        </div>
+    </div>
+
+    <dialog class="fd-edit-dialog" id="editProduceDialog" aria-labelledby="editDialogTitle">
+        <form id="editProduceForm" class="fd-edit-form" novalidate>
+            <div class="fd-dialog-heading"><div><p class="fd-eyebrow" data-i18n="farmer.produce.eyebrow">Your active listings</p><h2 id="editDialogTitle" data-i18n="farmer.action.editTitle">Edit produce listing</h2></div><button class="fd-dialog-close" type="button" data-edit-close aria-label="Close edit form" data-i18n-aria-label="farmer.dialog.close">×</button></div>
+            <div id="editFormMessage" class="fd-message" role="status" aria-live="polite"></div>
+            <div class="fd-field"><label for="edit_produce_name" data-i18n="farmer.field.produce">Produce name</label><input id="edit_produce_name" name="produce_name" type="text" required></div>
+            <div class="fd-form-grid-two">
+                <div class="fd-field"><label for="edit_quantity" data-i18n="farmer.field.quantity">Available quantity</label><input id="edit_quantity" name="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
+                <div class="fd-field"><label for="edit_price_per_unit" data-i18n="farmer.field.price">Price per unit (LKR)</label><input id="edit_price_per_unit" name="price_per_unit" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
+            </div>
+            <div class="fd-field"><label for="edit_district" data-i18n="farmer.field.district">District</label><select id="edit_district" name="district" required><option value="" data-i18n="farmer.district.select">Select a district</option>
+                <option value="Ampara" data-i18n="farmer.district.ampara">Ampara</option><option value="Anuradhapura" data-i18n="farmer.district.anuradhapura">Anuradhapura</option><option value="Badulla" data-i18n="farmer.district.badulla">Badulla</option><option value="Batticaloa" data-i18n="farmer.district.batticaloa">Batticaloa</option><option value="Colombo" data-i18n="farmer.district.colombo">Colombo</option><option value="Galle" data-i18n="farmer.district.galle">Galle</option><option value="Gampaha" data-i18n="farmer.district.gampaha">Gampaha</option><option value="Hambantota" data-i18n="farmer.district.hambantota">Hambantota</option><option value="Jaffna" data-i18n="farmer.district.jaffna">Jaffna</option><option value="Kalutara" data-i18n="farmer.district.kalutara">Kalutara</option><option value="Kandy" data-i18n="farmer.district.kandy">Kandy</option><option value="Kegalle" data-i18n="farmer.district.kegalle">Kegalle</option><option value="Kilinochchi" data-i18n="farmer.district.kilinochchi">Kilinochchi</option><option value="Kurunegala" data-i18n="farmer.district.kurunegala">Kurunegala</option><option value="Mannar" data-i18n="farmer.district.mannar">Mannar</option><option value="Matale" data-i18n="farmer.district.matale">Matale</option><option value="Matara" data-i18n="farmer.district.matara">Matara</option><option value="Monaragala" data-i18n="farmer.district.monaragala">Monaragala</option><option value="Mullaitivu" data-i18n="farmer.district.mullaitivu">Mullaitivu</option><option value="Nuwara Eliya" data-i18n="farmer.district.nuwaraEliya">Nuwara Eliya</option><option value="Polonnaruwa" data-i18n="farmer.district.polonnaruwa">Polonnaruwa</option><option value="Puttalam" data-i18n="farmer.district.puttalam">Puttalam</option><option value="Ratnapura" data-i18n="farmer.district.ratnapura">Ratnapura</option><option value="Trincomalee" data-i18n="farmer.district.trincomalee">Trincomalee</option><option value="Vavuniya" data-i18n="farmer.district.vavuniya">Vavuniya</option>
+            </select></div>
+            <div class="fd-field"><label for="edit_description" data-i18n="farmer.field.description">Description (optional)</label><textarea id="edit_description" name="description" rows="3"></textarea></div>
+            <div class="fd-dialog-actions"><button type="button" class="fd-button fd-button-secondary" data-edit-close data-i18n="farmer.action.cancel">Cancel</button><button type="submit" class="fd-button fd-button-primary" id="editSaveButton" data-i18n="farmer.action.save">Save changes</button></div>
+        </form>
+    </dialog>
+</body>
+</html>
+
+
+

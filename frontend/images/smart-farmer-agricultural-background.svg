@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <linearGradient id="field" x1="800" y1="640" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a8cc82" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#519768" stop-opacity=".42"/>
+    </linearGradient>
+    <linearGradient id="glassWash" x1="800" y1="0" x2="800" y2="850" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".32"/>
+      <stop offset=".62" stop-color="#fff" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="tractorBody" x1="1170" y1="707" x2="1340" y2="817" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#91bd63"/>
+      <stop offset="1" stop-color="#3f8558"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 0h1600v1000H0z" fill="url(#glassWash)"/>
+
+  <!-- Distant farmland and soft rolling hills -->
+  <path d="M0 400c150-110 263-112 405-23 116 73 202 79 327 3 133-81 234-91 361-9 134 87 257 75 507-38v667H0V400Z" fill="#83b978" fill-opacity=".13"/>
+  <path d="M0 531c180-93 317-92 468-5 127 73 243 76 366 2 138-83 271-96 408-15 138 81 240 79 358 27v460H0V531Z" fill="#6aab71" fill-opacity=".15"/>
+  <path d="M0 700c199-98 368-99 555-7 155 76 315 77 479-5 187-93 355-89 566-8v320H0V700Z" fill="url(#field)"/>
+  <path d="M0 810c214-74 394-68 571 14 177 81 337 82 521 2 182-79 334-78 508-27M0 887c210-55 384-49 559 25 188 79 363 79 547 6 181-72 332-65 494-19M0 953c221-43 393-34 565 33" stroke="#e4efcb" stroke-opacity=".58" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Trees frame the edges while leaving the center open for content -->
+  <g fill="#498762" fill-opacity=".3">
+    <path d="M93 476c-42-44-39-99 2-127-18-48 5-92 50-99 5-55 57-81 98-43 48-27 91 8 81 60 43 26 43 78 2 105 15 50-18 89-68 81-26 45-78 44-103 2-32 37-81 46-113 21Z"/>
+    <path d="M1380 469c-38-35-37-82-1-107-17-41 4-80 43-84 6-48 50-70 87-38 41-23 78 7 70 52 38 22 38 68 2 91 13 43-16 77-59 70-22 39-67 38-89 2-28 32-70 40-98 14Z"/>
+  </g>
+  <g stroke="#397954" stroke-opacity=".33" stroke-width="12" stroke-linecap="round">
+    <path d="M211 460v178m1321-177v181"/>
+  </g>
+  <g fill="#55966d" fill-opacity=".34">
+    <circle cx="80" cy="571" r="47"/><circle cx="110" cy="529" r="39"/><circle cx="154" cy="572" r="49"/>
+    <circle cx="1453" cy="572" r="48"/><circle cx="1490" cy="529" r="40"/><circle cx="1530" cy="570" r="48"/>
+  </g>
+
+  <!-- Gentle leaf silhouettes in the upper corners -->
+  <g fill="#4e9469" fill-opacity=".31">
+    <path d="M0 116C100 9 206 17 274 82 204 155 101 173 0 116Z"/>
+    <path d="M48 0c93 9 155 62 168 128C124 137 57 92 48 0Z"/>
+    <path d="M1600 109c-93-99-196-93-260-31 67 69 164 92 260 31Z"/>
+    <path d="M1547 0c-90 15-148 65-158 129 86 3 149-43 158-129Z"/>
+  </g>
+  <g stroke="#3f805b" stroke-opacity=".33" stroke-width="4" stroke-linecap="round">
+    <path d="M15 111c79 2 146-13 224-44M1558 110c-72 4-141-11-208-41"/>
+  </g>
+
+  <!-- Small stylized farm tractor near the lower edge -->
+  <g opacity=".74">
+    <circle cx="1227" cy="821" r="52" fill="#315f43"/>
+    <circle cx="1227" cy="821" r="25" fill="#e6efda"/>
+    <circle cx="1372" cy="827" r="34" fill="#315f43"/>
+    <circle cx="1372" cy="827" r="16" fill="#e6efda"/>
+    <path d="M1190 756h111l38 45h64v32h-36a52 52 0 0 0-101 0h-89v-42l13-35Z" fill="url(#tractorBody)"/>
+    <path d="M1244 710h70l33 47h-103v-47Z" fill="#5c9666"/>
+    <path d="M1258 722h43v29h-43v-29Z" fill="#dcebd8" fill-opacity=".8"/>
+    <path d="M1210 777h39v18h-39zm124-2h38v18h-38z" fill="#d9e9cf"/>
+    <path d="M1417 791h32v11h-32z" fill="#587a4f"/>
+  </g>
+
+  <!-- Curved green waves soften the bottom edge -->
+  <path d="M0 921c180-71 351-79 533-25 174 52 309 55 470 5 220-69 398-51 597 32v67H0v-79Z" fill="#75aa72" fill-opacity=".14"/>
+  <path d="M0 962c201-50 381-48 555 7 181 56 345 45 519-8 189-57 354-54 526 5v34H0v-38Z" fill="#3d8761" fill-opacity=".12"/>
+</svg>

@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ language if language in ['si', 'en', 'ta'] else 'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore fresh produce listings from farmers across Sri Lanka.">
+    <meta name="theme-color" content="#f7faf5">
+    <title data-i18n="produce.pageTitle">Explore fresh produce | Smart Farmer</title>
+    <script>
+        try {
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sf-theme") === "dark" ? "dark" : "light");
+        } catch (_) {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+    <link rel="stylesheet" href="/frontend/css/style.css?v=produce-category-library-20261115-5">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+    <link rel="stylesheet" href="/frontend/css/public_produce.css?v=produce-category-library-20261115-5">
+    <link rel="stylesheet" href="/frontend/css/produce-cards.css?v=4">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-public-page sf-public-produce-page">
+{% include "partials/public_header.html" %}
+
+<main class="sf-public-main" id="main-content">
+    <section class="sf-directory-hero" aria-labelledby="produce-page-title">
+        <div class="sf-container">
+            {{ back_button(url_for('public_dashboard')) }}
+            <p class="sf-eyebrow" data-i18n="produce.eyebrow">From local farms</p>
+            <h1 id="produce-page-title" data-i18n="produce.heading">Explore fresh produce</h1>
+            <p class="sf-directory-lead" data-i18n="produce.description">Browse currently available produce listings from farmers across Sri Lanka.</p>
+
+            <form class="sf-filter-form sf-produce-filter-form" id="produce-filter-form" role="search">
+                <label class="sf-search-field">
+                    <span class="sf-sr-only" data-i18n="produce.searchLabel">Search produce</span>
+                    <input id="produce-search" type="search" autocomplete="off" data-i18n-placeholder="produce.searchPlaceholder" placeholder="Search produce">
+                </label>
+                <label class="sf-district-field">
+                    <span class="sf-sr-only" data-i18n="produce.districtLabel">Filter by district</span>
+                    <select id="produce-district">
+                        <option value="" data-i18n="produce.allDistricts">All districts</option>
+                    </select>
+                </label>
+                <button class="sf-btn sf-btn-primary" type="submit" data-i18n="produce.filterButton">Filter</button>
+                <button class="sf-btn sf-btn-secondary sf-clear-filter" id="clear-produce-filters" type="button" data-i18n="produce.clearFilter">Clear Filter</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="sf-section sf-directory-section sf-public-produce-results" aria-label="Available produce" data-i18n-aria-label="produce.availableListings">
+        <div class="sf-container">
+            <div class="sf-produce-category-panel">
+                <p class="sf-category-filter-label" data-i18n="produce.category.label">Browse by category</p>
+                <div class="sf-produce-category-filter" id="publicProduceCategoryFilter" role="group" aria-label="Filter produce by category" data-i18n-aria-label="produce.category.filterLabel"></div>
+            </div>
+            <p class="sf-produce-result-count" id="produce-result-count" role="status" aria-live="polite" data-i18n="produce.loading">Loading available produce…</p>
+            <div class="sf-produce-grid sf-public-produce-grid sf-fresh-produce-grid" id="public-produce-grid" aria-live="polite"></div>
+        </div>
+    </section>
+</main>
+
+{% include "partials/public_footer.html" %}
+
+<script src="/frontend/js/i18n.js?v=produce-category-library-20261115-5"></script>
+<script src="/frontend/js/main.js"></script>
+<script src="/frontend/js/produce-images.js?v=produce-category-library-20261115-5"></script>
+<script src="/frontend/js/public_produce.js?v=produce-cards-1"></script>
+</body>
+</html>
+
+
+

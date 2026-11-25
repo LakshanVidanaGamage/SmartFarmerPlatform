@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="theme-color" content="#176b3a">
+    <title data-i18n="login.documentTitle">Sign in | Smart Farmer</title>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem("sf-theme");
+                var theme = savedTheme === "dark" ? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.style.colorScheme = theme;
+            } catch (error) {
+                document.documentElement.setAttribute("data-theme", "light");
+            }
+        }());
+    </script>
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+</head>
+<body class="sf-auth-page sf-login-page" data-auth-page>
+    <main class="sf-auth-layout">
+        <aside class="sf-auth-visual" aria-labelledby="auth-welcome-title">
+            <a class="sf-auth-brand" href="/" aria-label="Smart Farmer Platform" data-i18n-aria-label="auth.brandLabel">
+                <span class="sf-auth-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21M24 27C12 27 8 19 9 10c10-1 18 4 18 14M24 21c0-10 7-15 16-15 1 10-4 17-16 18M17 39h14"/></svg>
+                </span>
+                <span>Smart Farmer</span>
+            </a>
+            <div class="sf-auth-visual-copy">
+                <span class="sf-auth-eyebrow" data-i18n="auth.eyebrow">A marketplace that grows with you</span>
+                <h1 id="auth-welcome-title" data-i18n="auth.welcome">Good things grow when we connect.</h1>
+                <p data-i18n="auth.description">A trusted place for farmers and buyers to meet, share fresh produce and grow together.</p>
+            </div>
+            <img class="sf-auth-illustration" src="/frontend/images/auth-farm-illustration.svg" alt="Illustration of a farmer among green fields" data-i18n-alt="auth.illustrationAlt">
+            <p class="sf-auth-visual-footnote" data-i18n="auth.footnote">Connecting farmers and buyers across Sri Lanka.</p>
+        </aside>
+
+        <section class="sf-auth-panel" aria-label="Account access" data-i18n-aria-label="auth.loginPanel">
+            <div class="sf-auth-toolbar">
+                {{ back_button(url_for('public_dashboard')) }}
+                <div class="sf-auth-toolbar-controls">
+                <label class="sf-auth-language-label" for="languageSelect" data-i18n="auth.languageLabel">Language</label>
+                <select id="languageSelect" class="sf-auth-language" aria-label="Choose language" data-i18n-aria-label="auth.chooseLanguage">
+                    <option value="en" {% if language == 'en' %}selected{% endif %}>English</option>
+                    <option value="si" {% if language == 'si' %}selected{% endif %}>සිංහල</option>
+                    <option value="ta" {% if language == 'ta' %}selected{% endif %}>தமிழ்</option>
+                </select>
+                <button type="button" class="sf-theme-btn sf-auth-theme" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                </div>
+            </div>
+
+            <div class="sf-auth-card">
+                <section id="loginSection">
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="login.kicker">Welcome back</span>
+                        <h2 data-i18n="login.heading">Sign in to your account</h2>
+                        <p data-i18n="login.description">Continue to your Smart Farmer marketplace.</p>
+                    </div>
+                    <form id="loginForm" data-auth-form="login">
+                        <div class="form-group">
+                            <label for="loginEmail" data-i18n="common.emailLabel">Email address</label>
+                            <input type="email" id="loginEmail" name="email" placeholder="Enter your email" data-i18n-placeholder="common.emailPlaceholder" autocomplete="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword" data-i18n="common.passwordLabel">Password</label>
+                            <div class="sf-password-field">
+                                <input type="password" id="loginPassword" name="password" placeholder="Enter your password" data-i18n-placeholder="login.passwordPlaceholder" autocomplete="current-password" required>
+                                <button type="button" class="sf-password-toggle" data-password-toggle data-password-target="loginPassword" data-i18n-aria-label="auth.showPassword" aria-label="Show password" aria-controls="loginPassword" aria-pressed="false">
+                                    <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+                                    <svg data-eye-off viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="m3 3 18 18M10.6 6.2A10.5 10.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.7M6.2 6.3C3.9 7.9 2.5 12 2.5 12s3.4 6 9.5 6c1 0 1.9-.2 2.7-.5"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="sf-auth-inline-link">
+                            <button type="button" id="showForgotPassword" data-i18n="login.forgot">Forgot password?</button>
+                        </div>
+                        <div id="authMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" class="primary-btn" data-i18n="login.submit">Sign in</button>
+                    </form>
+                    <p class="auth-footer"><span data-i18n="login.noAccount">New to Smart Farmer?</span> <a href="/register-page" data-i18n="login.createAccount">Create an account</a></p>
+                </section>
+
+                <section id="forgotPasswordSection" hidden>
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="reset.kicker">Account recovery</span>
+                        <h2 data-i18n="reset.forgotHeading">Reset your password</h2>
+                        <p data-i18n="reset.forgotDescription">Enter your registered email address and we will send a verification code.</p>
+                    </div>
+                    <form id="forgotPasswordForm">
+                        <div class="form-group">
+                            <label for="resetEmail" data-i18n="common.emailLabel">Email address</label>
+                            <input type="email" id="resetEmail" name="email" placeholder="Enter your registered email" data-i18n-placeholder="reset.emailPlaceholder" autocomplete="email" required>
+                        </div>
+                        <div id="forgotMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" id="sendResetOtpButton" class="primary-btn" data-i18n="reset.sendCode">Send verification code</button>
+                    </form>
+                    {{ back_button(button_id="backToLogin") }}
+                </section>
+
+                <section id="resetOtpSection" hidden>
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="otp.kicker">Email verification</span>
+                        <h2 data-i18n="otp.heading">Verify your email</h2>
+                        <p data-i18n="reset.otpDescription">Enter the 6-digit verification code sent to your email.</p>
+                    </div>
+                    <p id="resetEmailDisplay" class="otp-email"></p>
+                    <form id="resetOtpForm">
+                        <div class="form-group">
+                            <label for="resetOtp" data-i18n="otp.codeLabel">Verification code</label>
+                            <input type="text" id="resetOtp" name="otp" placeholder="Enter 6-digit code" data-i18n-placeholder="otp.codePlaceholder" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+                        </div>
+                        <div id="resetOtpMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" id="verifyResetOtpButton" class="primary-btn" data-i18n="otp.verify">Verify code</button>
+                    </form>
+                    <div class="otp-resend">
+                        <p data-i18n="otp.noCode">Didn’t receive the code?</p>
+                        <button type="button" id="resendResetOtpButton" class="secondary-btn" data-i18n="otp.resend">Resend code</button>
+                        <small id="resetResendCountdown"></small>
+                    </div>
+                    {{ back_button(button_id="backToForgotPassword") }}
+                </section>
+
+                <section id="newPasswordSection" hidden>
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="reset.kicker">Account recovery</span>
+                        <h2 data-i18n="reset.newHeading">Create a new password</h2>
+                        <p data-i18n="reset.newDescription">Choose a strong password with at least 8 characters.</p>
+                    </div>
+                    <form id="newPasswordForm">
+                        <div class="form-group">
+                            <label for="newPassword" data-i18n="reset.newPasswordLabel">New password</label>
+                            <div class="sf-password-field">
+                                <input type="password" id="newPassword" name="password" placeholder="Enter new password" data-i18n-placeholder="reset.newPasswordPlaceholder" minlength="8" autocomplete="new-password" required>
+                                <button type="button" class="sf-password-toggle" data-password-toggle data-password-target="newPassword" data-i18n-aria-label="auth.showPassword" aria-label="Show password" aria-controls="newPassword" aria-pressed="false">
+                                    <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+                                    <svg data-eye-off viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="m3 3 18 18M10.6 6.2A10.5 10.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.7M6.2 6.3C3.9 7.9 2.5 12 2.5 12s3.4 6 9.5 6c1 0 1.9-.2 2.7-.5"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmNewPassword" data-i18n="reset.confirmPasswordLabel">Confirm new password</label>
+                            <div class="sf-password-field">
+                                <input type="password" id="confirmNewPassword" name="confirm_password" placeholder="Confirm new password" data-i18n-placeholder="reset.confirmPasswordPlaceholder" minlength="8" autocomplete="new-password" required>
+                                <button type="button" class="sf-password-toggle" data-password-toggle data-password-target="confirmNewPassword" data-i18n-aria-label="auth.showPassword" aria-label="Show password" aria-controls="confirmNewPassword" aria-pressed="false">
+                                    <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+                                    <svg data-eye-off viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="m3 3 18 18M10.6 6.2A10.5 10.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.7M6.2 6.3C3.9 7.9 2.5 12 2.5 12s3.4 6 9.5 6c1 0 1.9-.2 2.7-.5"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+                                </button>
+                            </div>
+                            <small id="resetPasswordStatus" class="field-status"></small>
+                        </div>
+                        <div id="newPasswordMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" id="resetPasswordButton" class="primary-btn" data-i18n="reset.submit">Update password</button>
+                    </form>
+                </section>
+            </div>
+            <p class="sf-auth-secure-note"><span aria-hidden="true">●</span> <span data-i18n="auth.secureNote">Your account details are protected.</span></p>
+        </section>
+    </main>
+    <script src="/frontend/js/i18n.js"></script>
+    <script src="/frontend/js/main.js"></script>
+    <script src="/frontend/js/auth.js"></script>
+</body>
+</html>

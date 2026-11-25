@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+{% from "partials/market_price_card.html" import market_price_card %}
+<html lang="{{ language if language in ['si', 'en', 'ta'] else 'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7faf5">
+    <title data-i18n="home.prices.tableTitle">Market Prices | Smart Farmer</title>
+    {% include "partials/theme_init.html" %}
+    <link rel="stylesheet" href="/frontend/css/style.css?v=market-prices-page-1">
+    <link rel="stylesheet" href="/frontend/css/market-prices.css?v=4">
+    <link rel="stylesheet" href="/frontend/css/back-button.css?v=1">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-home">
+{% include "partials/public_header.html" %}
+<main class="sf-public-main" id="main-content">
+    <section class="sf-section sf-public-market-prices" aria-labelledby="market-prices-title">
+        <div class="sf-container">
+            {{ back_button(url_for('public_dashboard')) }}
+            <p class="sf-eyebrow" data-i18n="home.prices.eyebrow">Market snapshot</p>
+            <h1 id="market-prices-title" data-i18n="home.prices.tableTitle">Latest market prices</h1>
+            <div class="sf-public-price-toolbar">
+                <label for="public-price-search" data-i18n="marketPrices.searchLabel">Search produce</label>
+                <form class="sf-public-price-form" id="public-price-form" role="search">
+                    <div class="sf-public-price-search">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
+                        <input id="public-price-search" type="search" autocomplete="off" placeholder="Search produce by name..." data-i18n-placeholder="marketPrices.searchPlaceholder">
+                        <button id="public-price-clear" type="button" data-i18n="marketPrices.clearSearch" hidden>Clear search</button>
+                    </div>
+                    <button class="sf-public-price-submit" type="submit" data-i18n="marketPrices.searchButton">Search</button>
+                </form>
+                <p id="public-price-count" class="sf-public-price-count" aria-live="polite"></p>
+            </div>
+            <div class="sf-market-price-grid sf-public-price-grid" id="public-price-grid">
+                {% for price in market_prices %}
+                {{ market_price_card(price, 'Rs. %.2f'|format(price.price_per_kg|float)) }}
+                {% endfor %}
+            </div>
+            <p id="public-price-empty" class="sf-prices-empty" data-i18n="home.prices.empty"{% if market_prices %} hidden{% endif %}>Market prices will appear here when they are available.</p>
+            <nav class="sf-public-price-pagination" id="public-price-pagination" aria-label="Market price pages" data-i18n-aria-label="marketPrices.paginationLabel">
+                <button type="button" id="public-price-previous" data-i18n="marketPrices.previous" disabled>Previous</button>
+                <div class="sf-public-price-pages" id="public-price-pages"></div>
+                <button type="button" id="public-price-next" data-i18n="marketPrices.next" disabled>Next</button>
+                <span class="sf-public-price-page-of" id="public-price-page-of" aria-live="polite">Page 1 of 1</span>
+            </nav>
+        </div>
+    </section>
+</main>
+{% include "partials/public_footer.html" %}
+<script src="/frontend/js/i18n.js?v=market-prices-page-3"></script>
+<script src="/frontend/js/main.js"></script>
+<script src="/frontend/js/produce-images.js?v=market-prices-page-1"></script>
+<script src="/frontend/js/public-market-prices.js?v=2"></script>
+</body>
+</html>

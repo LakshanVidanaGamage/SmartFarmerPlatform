@@ -1,0 +1,29 @@
+{% macro market_price_card(price, amount) -%}
+<article class="sf-market-price-card"{% if loop_index is defined and loop_index > 6 %} hidden{% endif %}>
+    <div class="sf-market-price-media">
+        <img data-produce-image data-produce-image-fallback="mixed" data-produce-name="{{ price.produce_name }}" alt="{{ price.produce_name }}" loading="lazy" decoding="async">
+    </div>
+    <div class="sf-market-price-body">
+        <h3>{{ price.produce_name }}</h3>
+        <p class="sf-market-price-amount"><strong>{{ amount }}</strong> <span data-i18n="buyer.prices.perKg">/ kg</span></p>
+        <dl class="sf-market-price-details">
+            <div>
+                <dt data-i18n="home.prices.market">Market</dt>
+                <dd>{{ price.market_name }}{% if price.district %}<span>{{ price.district }}</span>{% endif %}</dd>
+            </div>
+            <div>
+                <dt data-i18n="home.prices.updated">Updated</dt>
+                <dd><time datetime="{{ price.price_date }}">{{ price.price_date }}</time></dd>
+            </div>
+        </dl>
+    </div>
+</article>
+{% endmacro %}
+
+{% macro market_price_view_more(count, section_id) -%}
+{% if count > 6 %}
+<div class="sf-market-price-actions" data-market-price-actions data-target="{{ section_id }}">
+    <button class="sf-market-price-toggle" type="button" data-i18n="marketPrices.viewMore" aria-expanded="false">View More</button>
+</div>
+{%- endif %}
+{% endmacro %}

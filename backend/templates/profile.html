@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+{% set is_farmer = session.get('role') == 'farmer' %}
+{% set is_buyer = session.get('role') == 'buyer' %}
+{% set is_admin = session.get('role') == 'admin' %}
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View and update your Smart Farmer account profile.">
+    <title data-i18n="account.pageTitle">My Profile | Smart Farmer</title>
+    {% if is_farmer or is_buyer or is_admin %}
+    <script>
+        try {
+            const savedTheme = localStorage.getItem("sf-theme");
+            document.documentElement.setAttribute("data-theme", savedTheme === "dark" ? "dark" : "light");
+        } catch (error) {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+    {% if is_farmer %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/farmer_dashboard.css') }}">
+    {% elif is_buyer %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buyer_dashboard.css') }}">
+    {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    {% endif %}
+    {% else %}
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    {% endif %}
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+    {% if is_admin %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=3">{% endif %}
+</head>
+<body class="{% if is_farmer %}sf-farmer-dashboard{% elif is_buyer %}sf-buyer-dashboard{% elif is_admin %}admin-page{% else %}sf-public-page{% endif %}">
+{% if is_farmer %}
+<a class="fd-skip-link" href="#main-content" data-i18n="farmer.skip">Skip to profile content</a>
+<div class="fd-shell">
+    <aside class="fd-sidebar" id="farmerSidebar" aria-label="Farmer dashboard navigation" data-i18n-aria-label="farmer.nav.aria">
+        <a class="fd-brand" href="{{ url_for('farmer_dashboard') }}" aria-label="Smart Farmer dashboard">
+            <span class="fd-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21"></path><path d="M24 26C12 26 8 18 9 9c10-1 18 4 18 14"></path><path d="M24 21c0-10 7-15 16-15 1 10-4 17-16 18"></path><path d="M17 39h14"></path></svg></span>
+            <span class="fd-brand-copy"><strong>Smart Farmer</strong><small data-i18n="farmer.header.role">Farmer account</small></span>
+        </a>
+        <button class="fd-nav-toggle" type="button" data-farmer-nav-toggle aria-controls="farmerNav" aria-expanded="false" aria-label="Open dashboard navigation" data-i18n-aria-label="farmer.nav.open"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+        <div class="fd-nav-panel" id="farmerNav">
+            <p class="fd-nav-label" data-i18n="farmer.nav.group">Workspace</p>
+            <nav class="fd-nav-links" aria-label="Dashboard sections" data-i18n-aria-label="farmer.nav.sections">
+                <a class="fd-nav-link" href="{{ url_for('farmer_dashboard') }}#dashboard" data-profile-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="5" rx="2"></rect><rect x="13" y="10" width="8" height="11" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect></svg><span data-i18n="farmer.nav.overview">Overview</span></a>
+                <a class="fd-nav-link" href="{{ url_for('farmer_dashboard') }}#add-produce" data-profile-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span data-i18n="farmer.nav.add">Add produce</span></a>
+                <a class="fd-nav-link" href="{{ url_for('farmer_dashboard') }}#my-produce" data-profile-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-5 0-8-3-8-8 5 0 8 3 8 8Z"></path><path d="M12 20c0-6 3-11 9-13 1 7-3 12-9 13ZM12 20V9"></path></svg><span data-i18n="farmer.nav.produce">My produce</span></a>
+                <a class="fd-nav-link" href="{{ url_for('farmer_dashboard') }}#offers" data-profile-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg><span data-i18n="farmer.nav.offers">Received offers</span></a>
+                <a class="fd-nav-link" href="{{ url_for('farmer_dashboard') }}#orders" data-profile-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg><span data-i18n="farmer.nav.orders">My orders</span></a>
+            </nav>
+            <div class="fd-account-nav"><p class="fd-nav-label" data-i18n="farmer.nav.account">Account</p>
+                <a class="fd-nav-link is-active" href="{{ url_for('profile.profile_page') }}" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span data-i18n="farmer.nav.profile">My profile</span></a>
+                <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}"><button type="submit" class="fd-nav-link fd-logout-link" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"></path><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path></svg><span data-i18n="farmer.nav.logout">Log out</span></button></form>
+            </div>
+        </div>
+        <p class="fd-sidebar-footnote" data-i18n="farmer.footer">Smart Farmer connects local growers with buyers across Sri Lanka.</p>
+    </aside>
+    <div class="fd-main-column">
+        <header class="fd-topbar" data-site-header><div class="fd-topbar-heading"><p data-i18n="farmer.header.workspace">Farmer workspace</p><h1 data-i18n="account.title">My Profile</h1></div>
+            <div class="fd-topbar-actions" data-header-actions><label class="fd-sr-only" for="languageSelect" data-i18n="farmer.language">Language</label>
+                <select id="languageSelect" class="fd-language-select" aria-label="Language" data-i18n-aria-label="public.language.choose"><option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>English</option><option value="si" {% if session.get('language') == 'si' %}selected{% endif %}>සිංහල</option><option value="ta" {% if session.get('language') == 'ta' %}selected{% endif %}>தமிழ்</option></select>
+                <button class="fd-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                {{ back_button(url_for('farmer_dashboard')) }}
+            </div>
+        </header>
+        <main class="fd-content" id="main-content"><header class="fd-profile-heading"><p class="fd-eyebrow" data-i18n="account.eyebrow">Your account</p><h2 data-i18n="account.title">My Profile</h2><p data-i18n="account.intro">Review your account details and keep your contact information up to date.</p></header>
+{% elif is_buyer %}
+<a class="bd-skip-link" href="#main-content" data-i18n="buyer.skip">Skip to dashboard content</a>
+<div class="bd-shell">
+    <aside class="bd-sidebar" id="buyerSidebar">
+        <a class="bd-brand" href="{{ url_for('buyer_dashboard') }}#overview" aria-label="Smart Farmer buyer dashboard" data-i18n-aria-label="buyer.brand.aria"><span class="bd-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21"></path><path d="M24 26C12 26 8 18 9 9c10-1 18 4 18 14"></path><path d="M24 21c0-10 7-15 16-15 1 10-4 17-16 18"></path><path d="M17 39h14"></path></svg></span><span class="bd-brand-copy"><strong>Smart Farmer</strong><small data-i18n="buyer.brand.subtitle">Buyer workspace</small></span></a>
+        <button class="bd-nav-toggle" type="button" data-buyer-nav-toggle aria-controls="buyerProfileNav" aria-expanded="false" aria-label="Open dashboard navigation" data-i18n-aria-label="buyer.nav.open"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+        <div class="bd-nav-panel" id="buyerProfileNav">
+            <p class="bd-nav-label" data-i18n="buyer.nav.group">Workspace</p>
+            <nav class="bd-nav-links" aria-label="Buyer dashboard sections" data-i18n-aria-label="buyer.nav.aria">
+                <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#overview" data-buyer-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="5" rx="2"></rect><rect x="13" y="10" width="8" height="11" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect></svg><span data-i18n="buyer.nav.overview">Overview</span></a>
+                <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#produce" data-buyer-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-5 0-8-3-8-8 5 0 8 3 8 8Z"></path><path d="M12 20c0-6 3-11 9-13 1 7-3 12-9 13ZM12 20V9"></path></svg><span data-i18n="buyer.nav.produce">Browse produce</span></a>
+                <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#prices" data-buyer-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M8 15l4-5 3 2 5-7"></path></svg><span data-i18n="buyer.nav.prices">Market prices</span></a>
+                <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#offers" data-buyer-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12V8a2 2 0 0 1 4 0v4-6a2 2 0 0 1 4 0v6-4a2 2 0 0 1 4 0v7a7 7 0 0 1-7 7h-1a7 7 0 0 1-5-2l-3-3a2 2 0 0 1 3-3l2 2"></path></svg><span data-i18n="buyer.nav.offers">My offers</span></a>
+                <a class="bd-nav-link" href="{{ url_for('buyer_dashboard') }}#orders" data-buyer-nav-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z"></path><path d="m4 7 8 4 8-4M12 11v10"></path></svg><span data-i18n="buyer.nav.orders">My orders</span></a>
+            </nav>
+            <div class="bd-account-nav"><p class="bd-nav-label" data-i18n="buyer.nav.account">Account</p>
+                <a class="bd-nav-link is-active" href="{{ url_for('profile.profile_page') }}" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span data-i18n="buyer.nav.profile">My profile</span></a>
+                <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ session.get('auth_csrf_token', '')|e }}"><button type="submit" class="bd-nav-link bd-logout" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font-family:inherit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"></path><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path></svg><span data-i18n="buyer.nav.logout">Log out</span></button></form>
+            </div>
+        </div>
+        <p class="bd-sidebar-note" data-i18n="buyer.sidebar.note">Fresh choices from farms across Sri Lanka.</p>
+    </aside>
+    <div class="bd-main-column">
+        <header class="bd-topbar" data-site-header><div class="bd-topbar-copy"><p data-i18n="buyer.topbar.workspace">Buyer workspace</p><h1 data-i18n="account.title">My Profile</h1></div>
+            <div class="bd-topbar-actions" data-header-actions><label class="bd-sr-only" for="languageSelect" data-i18n="buyer.language">Language</label>
+                <select id="languageSelect" class="bd-language" aria-label="Choose language" data-i18n-aria-label="public.language.choose"><option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>English</option><option value="si" {% if session.get('language') == 'si' %}selected{% endif %}>සිංහල</option><option value="ta" {% if session.get('language') == 'ta' %}selected{% endif %}>தமிழ்</option></select>
+                <button class="bd-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                {{ back_button(url_for('buyer_dashboard')) }}
+            </div>
+        </header>
+        <main class="bd-content" id="main-content"><header class="bd-profile-heading"><p class="bd-eyebrow" data-i18n="account.eyebrow">Your account</p><h2 data-i18n="account.title">My Profile</h2><p data-i18n="account.intro">Review your account details and keep your contact information up to date.</p></header>
+{% elif is_admin %}
+<a class="admin-profile-skip" href="#main-content" data-i18n="admin.profile.skip">Skip to profile content</a>
+<div class="admin-shell" id="admin-shell">
+    {% set admin_sidebar_profile = true %}
+    {% include "partials/admin_sidebar.html" %}
+    <div class="admin-main">
+        <header class="admin-topbar" data-site-header>
+            <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Open navigation" aria-expanded="false" data-i18n-aria-label="admin.nav.open">☰</button>
+            <div class="topbar-heading"><p class="eyebrow" data-i18n="admin.profile.workspace">Admin workspace</p><h1 data-i18n="account.title">My Profile</h1></div>
+            <div class="topbar-actions" data-header-actions>
+                <label class="sr-only" for="languageSelect" data-i18n="admin.language">Language</label>
+                <select id="languageSelect" class="admin-language-select" aria-label="Language" data-i18n-aria-label="admin.language"><option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>English</option><option value="si" {% if session.get('language') == 'si' %}selected{% endif %}>සිංහල</option><option value="ta" {% if session.get('language') == 'ta' %}selected{% endif %}>தமிழ்</option></select>
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+                {{ back_button(url_for('dashboard')) }}
+            </div>
+        </header>
+        <main class="admin-profile-content" id="main-content"><header class="admin-profile-heading"><p class="eyebrow" data-i18n="account.eyebrow">Your account</p><h2 data-i18n="account.title">My Profile</h2><p data-i18n="account.intro">Review your account details and keep your contact information up to date.</p></header>
+{% else %}
+{% include "partials/public_header.html" %}
+<main class="sf-account-main" id="main-content"><div class="sf-container"><header class="sf-account-heading"><p class="sf-eyebrow" data-i18n="account.eyebrow">Your account</p><h1 data-i18n="account.title">My Profile</h1><p data-i18n="account.intro">Review your account details and keep your contact information up to date.</p></header>
+{% endif %}
+
+{% if error %}
+<p class="{% if is_farmer %}fd-profile-message fd-profile-error{% elif is_buyer %}bd-profile-message bd-profile-error{% else %}sf-account-message sf-account-message-error{% endif %}" role="alert" data-i18n-runtime="{{ error }}">{{ error }}</p>
+{% endif %}
+{% if saved %}
+<p class="{% if is_farmer %}fd-profile-message fd-profile-success{% elif is_buyer %}bd-profile-message bd-profile-success{% else %}sf-account-message sf-account-message-success{% endif %}" role="status" data-i18n="account.updated">Your profile has been updated.</p>
+{% endif %}
+
+{% if profile %}
+<div class="{% if is_farmer %}fd-profile-grid{% elif is_buyer %}bd-profile-grid{% else %}sf-account-grid{% endif %}">
+    <section class="{% if is_farmer %}fd-panel fd-profile-panel fd-profile-summary{% elif is_buyer %}bd-panel bd-profile-panel bd-profile-summary{% else %}sf-account-card sf-account-summary{% endif %}" aria-labelledby="account-summary-title">
+        <div class="{% if is_farmer %}fd-profile-avatar{% elif is_buyer %}bd-profile-avatar{% else %}sf-profile-avatar sf-profile-avatar-large{% endif %}" aria-hidden="true">{{ profile.full_name[:1]|upper }}</div>
+        <p class="{% if is_farmer %}fd-eyebrow{% elif is_buyer %}bd-eyebrow{% else %}sf-eyebrow{% endif %}" data-i18n="account.signedIn">Signed in as</p>
+        <h2 id="account-summary-title">{{ profile.full_name }}</h2>
+        <span class="{% if is_farmer %}fd-profile-role{% elif is_buyer %}bd-profile-role{% else %}sf-account-role{% endif %}" data-i18n-role="{{ profile.role }}">{{ profile.role|title }}</span>
+        <dl class="{% if is_farmer %}fd-profile-details{% elif is_buyer %}bd-profile-details{% else %}sf-account-details{% endif %}"><div><dt data-i18n="account.email">Email</dt><dd>{{ profile.email }}</dd></div><div><dt data-i18n="account.phone">Phone</dt><dd>{{ profile.phone }}</dd></div></dl>
+    </section>
+
+    <section class="{% if is_farmer %}fd-panel fd-profile-panel fd-profile-edit{% elif is_buyer %}bd-panel bd-profile-panel bd-profile-edit{% else %}sf-account-card sf-account-edit{% endif %}" aria-labelledby="edit-profile-title">
+        <p class="{% if is_farmer %}fd-eyebrow{% elif is_buyer %}bd-eyebrow{% else %}sf-eyebrow{% endif %}" data-i18n="account.detailsEyebrow">Profile details</p>
+        <h2 id="edit-profile-title" data-i18n="account.editTitle">Edit your information</h2>
+        <p class="{% if is_farmer %}fd-profile-note{% elif is_buyer %}bd-profile-note{% else %}sf-muted-copy{% endif %}" data-i18n="account.editNote">Your email address and account role are managed by the platform.</p>
+        <form class="{% if is_farmer %}fd-profile-form{% elif is_buyer %}bd-profile-form{% else %}sf-account-form{% endif %}" method="post" action="{{ url_for('profile.profile_page') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="{% if is_farmer %}fd-form-grid-two{% elif is_buyer %}bd-profile-name-fields{% else %}sf-account-name-fields{% endif %}">
+                <label class="{% if is_farmer %}fd-field{% elif is_buyer %}bd-field{% endif %}"><span data-i18n="account.firstName">First name</span><input type="text" name="first_name" value="{{ profile.first_name }}" maxlength="50" autocomplete="given-name" required></label>
+                <label class="{% if is_farmer %}fd-field{% elif is_buyer %}bd-field{% endif %}"><span data-i18n="account.lastName">Last name</span><input type="text" name="last_name" value="{{ profile.last_name }}" maxlength="100" autocomplete="family-name" required></label>
+            </div>
+            <label class="{% if is_farmer %}fd-field{% elif is_buyer %}bd-field{% endif %}"><span data-i18n="account.phoneLabel">Phone number</span><input type="tel" name="phone" value="{{ profile.phone }}" maxlength="20" autocomplete="tel" required></label>
+            <button class="{% if is_farmer %}fd-button fd-button-primary{% elif is_buyer %}bd-button bd-button-primary{% else %}sf-btn sf-btn-primary{% endif %}" type="submit" data-i18n="account.save">Save changes</button>
+        </form>
+    </section>
+</div>
+{% endif %}
+
+{% if is_farmer %}
+        </main>
+    </div>
+</div>
+{% elif is_buyer %}
+        </main>
+    </div>
+</div>
+{% elif is_admin %}
+        </main>
+    </div>
+</div>
+{% else %}
+    </div></main>
+{% include "partials/public_footer.html" %}
+{% endif %}
+
+<script src="/frontend/js/i18n.js" defer></script>
+<script src="/frontend/js/main.js" defer></script>
+{% if is_farmer %}
+<script src="{{ url_for('static', filename='js/farmer_dashboard.js') }}" defer></script>
+{% elif is_buyer %}
+<script src="{{ url_for('static', filename='js/buyer_dashboard.js') }}" defer></script>
+{% elif is_admin %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const shell = document.getElementById("admin-shell");
+        const toggle = document.getElementById("sidebar-toggle");
+        const backdrop = document.getElementById("sidebar-backdrop");
+        const close = function () { shell?.classList.remove("is-sidebar-open"); if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.setAttribute("aria-label", window.SmartFarmerI18n?.translateKey("admin.nav.open") || "Open navigation"); } if (backdrop) backdrop.hidden = true; };
+        toggle?.addEventListener("click", function () { const open = !shell?.classList.contains("is-sidebar-open"); shell?.classList.toggle("is-sidebar-open", open); toggle.setAttribute("aria-expanded", String(open)); toggle.setAttribute("aria-label", window.SmartFarmerI18n?.translateKey(open ? "admin.nav.close" : "admin.nav.open") || (open ? "Close navigation" : "Open navigation")); if (backdrop) backdrop.hidden = !open; });
+        backdrop?.addEventListener("click", close);
+        document.addEventListener("keydown", function (event) { if (event.key === "Escape") close(); });
+    });
+</script>
+{% endif %}
+</body>
+</html>

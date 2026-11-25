@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View public buyer profile information on Smart Farmer.">
+    {% if buyer %}<title data-i18n="profile.buyer.title" data-i18n-param-name="{{ buyer.full_name }}">{{ buyer.full_name }} | Buyer Profile | Smart Farmer</title>{% else %}<title data-i18n="profile.buyer.notFoundTitle">Buyer Not Found | Smart Farmer</title>{% endif %}
+    {% include "partials/theme_init.html" %}
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+    <link rel="stylesheet" href="/frontend/css/agricultural-page-background.css?v=4">
+</head>
+<body class="sf-public-page">
+{% include "partials/public_header.html" %}
+
+<main class="sf-public-main sf-profile-main" id="main-content">
+    <div class="sf-container">
+        {{ back_button(url_for('public_buyers')) }}
+
+        {% if buyer %}
+        <section class="sf-buyer-profile-card">
+            <span class="sf-profile-avatar sf-profile-avatar-large sf-buyer-avatar" aria-hidden="true">{{ buyer.full_name[:1]|upper }}</span>
+            <p class="sf-eyebrow" data-i18n="profile.buyer.eyebrow">Public buyer profile</p>
+            <h1>{{ buyer.full_name }}</h1>
+            <span class="sf-account-type" data-i18n="profile.buyer.role">Registered buyer</span>
+            <p class="sf-buyer-profile-note" data-i18n="profile.buyer.note">No additional public profile details have been provided.</p>
+            <a class="sf-btn sf-btn-primary" href="{{ url_for('public_buyers') }}" data-i18n="profile.buyer.browse">Browse buyers</a>
+        </section>
+        {% else %}
+        <section class="sf-profile-not-found">
+            <span class="sf-empty-icon" aria-hidden="true">?</span>
+            <p class="sf-eyebrow" data-i18n="profile.buyer.unavailableEyebrow">Profile unavailable</p>
+            <h1 data-i18n="profile.buyer.notFound">Buyer not found</h1>
+            <p class="sf-muted-copy" data-i18n="profile.buyer.unavailableCopy">This public buyer profile is unavailable.</p>
+            <a class="sf-btn sf-btn-primary" href="{{ url_for('public_buyers') }}" data-i18n="profile.buyer.browse">Browse buyers</a>
+        </section>
+        {% endif %}
+    </div>
+</main>
+
+{% include "partials/public_footer.html" %}
+<script src="/frontend/js/i18n.js"></script>
+<script src="/frontend/js/main.js"></script>
+</body>
+</html>

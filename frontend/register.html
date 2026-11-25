@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+{% from "partials/back_button.html" import back_button %}
+<html lang="{{ language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="theme-color" content="#176b3a">
+    <title data-i18n="register.documentTitle">Create an account | Smart Farmer</title>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem("sf-theme");
+                var theme = savedTheme === "dark" ? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.style.colorScheme = theme;
+            } catch (error) {
+                document.documentElement.setAttribute("data-theme", "light");
+            }
+        }());
+    </script>
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="/frontend/css/back-button.css">
+</head>
+<body class="sf-auth-page" data-auth-page>
+    <main class="sf-auth-layout">
+        <aside class="sf-auth-visual" aria-labelledby="auth-welcome-title">
+            <a class="sf-auth-brand" href="/" aria-label="Smart Farmer Platform" data-i18n-aria-label="auth.brandLabel">
+                <span class="sf-auth-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false"><path d="M24 39V21M24 27C12 27 8 19 9 10c10-1 18 4 18 14M24 21c0-10 7-15 16-15 1 10-4 17-16 18M17 39h14"/></svg>
+                </span>
+                <span>Smart Farmer</span>
+            </a>
+            <div class="sf-auth-visual-copy">
+                <span class="sf-auth-eyebrow" data-i18n="auth.eyebrow">A marketplace that grows with you</span>
+                <h1 id="auth-welcome-title" data-i18n="auth.welcome">Good things grow when we connect.</h1>
+                <p data-i18n="auth.description">A trusted place for farmers and buyers to meet, share fresh produce and grow together.</p>
+            </div>
+            <img class="sf-auth-illustration" src="/frontend/images/auth-farm-illustration.svg" alt="Illustration of a farmer among green fields" data-i18n-alt="auth.illustrationAlt">
+            <p class="sf-auth-visual-footnote" data-i18n="auth.footnote">Connecting farmers and buyers across Sri Lanka.</p>
+        </aside>
+
+        <section class="sf-auth-panel sf-auth-panel-registration" aria-label="Create account" data-i18n-aria-label="auth.registerPanel">
+            <div class="sf-auth-toolbar">
+                <label class="sf-auth-language-label" for="languageSelect" data-i18n="auth.languageLabel">Language</label>
+                <select id="languageSelect" class="sf-auth-language" aria-label="Choose language" data-i18n-aria-label="auth.chooseLanguage">
+                    <option value="en" {% if language == 'en' %}selected{% endif %}>English</option>
+                    <option value="si" {% if language == 'si' %}selected{% endif %}>සිංහල</option>
+                    <option value="ta" {% if language == 'ta' %}selected{% endif %}>தமிழ்</option>
+                </select>
+                <button type="button" class="sf-theme-btn sf-auth-theme" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+            </div>
+
+            <div class="sf-auth-card">
+                <section id="registrationSection">
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="register.kicker">Join the marketplace</span>
+                        <h2 data-i18n="register.heading">Create your account</h2>
+                        <p data-i18n="register.description">Connect with the Smart Farmer community.</p>
+                    </div>
+                    <form id="registerForm" data-auth-form="register">
+                        <div class="sf-auth-name-fields">
+                            <div class="form-group">
+                                <label for="first_name" data-i18n="register.firstName">First name</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" data-i18n-placeholder="register.firstNamePlaceholder" maxlength="50" autocomplete="given-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name" data-i18n="register.lastName">Last name</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" data-i18n-placeholder="register.lastNamePlaceholder" maxlength="100" autocomplete="family-name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="common.emailLabel">Email address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" data-i18n-placeholder="common.emailPlaceholder" autocomplete="email" required>
+                            <small id="emailStatus" class="field-status" aria-live="polite"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" data-i18n="register.phone">Phone number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" data-i18n-placeholder="register.phonePlaceholder" autocomplete="tel" required>
+                            <small id="phoneStatus" class="field-status" aria-live="polite"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="role" data-i18n="register.accountType">Account type</label>
+                            <div class="sf-role-choice-grid" role="group" aria-label="Choose an account type" data-i18n-aria-label="register.accountType" data-role-choices>
+                                <button type="button" class="sf-role-choice" data-role-choice="farmer" aria-pressed="false">
+                                    <span class="sf-role-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21v-8m0 3C5.5 16 3.5 12 4 6c5.5-.4 9.4 2.6 9.5 8m-1.5-3c0-5 3.4-7.6 8-7.5.5 5-2 8.2-7.5 8.5M6 21h12"></path></svg></span>
+                                    <span class="sf-role-choice-copy"><strong data-i18n="register.farmer">Farmer</strong><small data-i18n="register.farmerRoleHint">Grow and share your produce</small></span>
+                                    <span class="sf-role-choice-check" aria-hidden="true">✓</span>
+                                </button>
+                                <button type="button" class="sf-role-choice" data-role-choice="buyer" aria-pressed="false">
+                                    <span class="sf-role-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 9h18l-1.4 11H4.4L3 9Zm0 0 2-5h14l2 5M8 9v11m8-11v11M9 14h6"></path></svg></span>
+                                    <span class="sf-role-choice-copy"><strong data-i18n="register.buyer">Buyer</strong><small data-i18n="register.buyerRoleHint">Discover fresh local produce</small></span>
+                                    <span class="sf-role-choice-check" aria-hidden="true">✓</span>
+                                </button>
+                            </div>
+                            <select id="role" name="role" class="sf-role-select" required>
+                                <option value="" data-i18n="register.selectAccountType">Select account type</option>
+                                <option value="farmer" data-i18n="register.farmer">Farmer</option>
+                                <option value="buyer" data-i18n="register.buyer">Buyer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" data-i18n="common.passwordLabel">Password</label>
+                            <div class="sf-password-field">
+                                <input type="password" id="password" name="password" placeholder="At least 8 characters" data-i18n-placeholder="register.passwordPlaceholder" minlength="8" autocomplete="new-password" required>
+                                <button type="button" class="sf-password-toggle" data-password-toggle data-password-target="password" data-i18n-aria-label="auth.showPassword" aria-label="Show password" aria-controls="password" aria-pressed="false">
+                                    <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+                                    <svg data-eye-off viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="m3 3 18 18M10.6 6.2A10.5 10.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.7M6.2 6.3C3.9 7.9 2.5 12 2.5 12s3.4 6 9.5 6c1 0 1.9-.2 2.7-.5"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+                                </button>
+                            </div>
+                            <div class="sf-password-strength" data-password-strength hidden>
+                                <div class="sf-password-strength-top"><span data-i18n="register.passwordStrengthLabel">Password strength</span><strong data-password-strength-label></strong></div>
+                                <span class="sf-password-strength-track" role="meter" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" aria-label="Password strength" data-i18n-aria-label="register.passwordStrengthLabel"><span data-password-strength-fill></span></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password" data-i18n="register.confirmPassword">Confirm password</label>
+                            <div class="sf-password-field">
+                                <input type="password" id="confirm_password" name="confirm_password" placeholder="Enter your password again" data-i18n-placeholder="register.confirmPasswordPlaceholder" autocomplete="new-password" required>
+                                <button type="button" class="sf-password-toggle" data-password-toggle data-password-target="confirm_password" data-i18n-aria-label="auth.showPassword" aria-label="Show password" aria-controls="confirm_password" aria-pressed="false">
+                                    <svg data-eye-open viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+                                    <svg data-eye-off viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="m3 3 18 18M10.6 6.2A10.5 10.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.7M6.2 6.3C3.9 7.9 2.5 12 2.5 12s3.4 6 9.5 6c1 0 1.9-.2 2.7-.5"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+                                </button>
+                            </div>
+                            <small id="passwordStatus" class="field-status" aria-live="polite"></small>
+                        </div>
+                        <div id="authMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" id="registerButton" class="primary-btn" data-i18n="register.submit">Continue with email verification</button>
+                    </form>
+                    <p class="auth-footer"><span data-i18n="register.hasAccount">Already have an account?</span> <a href="/login-page" data-i18n="register.signIn">Sign in</a></p>
+                </section>
+
+                <section id="otpSection" hidden>
+                    <div class="auth-heading">
+                        <span class="sf-auth-card-kicker" data-i18n="otp.kicker">Email verification</span>
+                        <h2 data-i18n="otp.heading">Verify your email</h2>
+                        <p data-i18n="register.otpDescription">We sent a 6-digit verification code to your email address.</p>
+                    </div>
+                    <p id="otpEmailDisplay" class="otp-email"></p>
+                    <form id="otpForm">
+                        <div class="form-group">
+                            <label for="otp" data-i18n="otp.codeLabel">Verification code</label>
+                            <input type="text" id="otp" name="otp" placeholder="Enter 6-digit code" data-i18n-placeholder="otp.codePlaceholder" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+                        </div>
+                        <div id="otpMessage" class="message" role="alert" aria-live="polite"></div>
+                        <button type="submit" id="verifyButton" class="primary-btn" data-i18n="otp.verifyEmail">Verify email</button>
+                    </form>
+                    <div class="otp-resend">
+                        <p data-i18n="otp.noCode">Didn’t receive the code?</p>
+                        <button type="button" id="resendOtpButton" class="secondary-btn" data-i18n="otp.resend">Resend code</button>
+                        <small id="resendCountdown"></small>
+                    </div>
+                    {{ back_button(button_id="backToRegister") }}
+                </section>
+            </div>
+            <p class="sf-auth-secure-note"><span aria-hidden="true">●</span> <span data-i18n="auth.secureNote">Your account details are protected.</span></p>
+        </section>
+    </main>
+    <script src="/frontend/js/i18n.js"></script>
+    <script src="/frontend/js/main.js"></script>
+    <script src="/frontend/js/auth.js"></script>
+</body>
+</html>
